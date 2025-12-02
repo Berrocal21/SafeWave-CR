@@ -1,0 +1,192 @@
+{
+    "config": {
+        "logo_path": "fotos/Logo.png"
+    },
+    "pilares": [
+        {
+            "titulo": "Educación Preventiva",
+            "descripcion": "Enseñamos a identificar los tipos de banderas y señales de peligro en nuestras costas.",
+            "icono": "fa-solid fa-book-open"
+        },
+        {
+            "titulo": "Monitoreo en Tiempo Real",
+            "descripcion": "Simulamos condiciones de oleaje y mareas para planificar tu visita de forma segura.",
+            "icono": "fa-solid fa-water"
+        },
+        {
+            "titulo": "Cultura de Seguridad",
+            "descripcion": "Fomentamos el turismo responsable y el respeto por la fuerza del mar.",
+            "icono": "fa-solid fa-users"
+        }
+    ],
+    "carrusel": [
+        {
+            "src": "https://images.unsplash.com/photo-1507525428034-b723cf961d3e?q=80&w=1000&auto=format&fit=crop",
+            "titulo": "Seguridad en Playas",
+            "descripcion": "Aprende a identificar los peligros del mar."
+        },
+        {
+            "src": "https://images.unsplash.com/photo-1506953823976-52e1fdc0149a?q=80&w=1000&auto=format&fit=crop",
+            "titulo": "Corrientes de Resaca",
+            "descripcion": "Cómo actuar si te atrapa una corriente."
+        },
+        {
+            "src": "https://images.unsplash.com/photo-1519046904884-53103b34b206?q=80&w=1000&auto=format&fit=crop",
+            "titulo": "Disfruta con Responsabilidad",
+            "descripcion": "Consejos para un verano seguro."
+        }
+    ],
+    "consejos": [
+        "Si te atrapa una corriente, nada en paralelo a la orilla.",
+        "Nunca nades solo, busca playas con guardavidas.",
+        "Respeta las banderas de advertencia en la playa.",
+        "Mantente hidratado y usa protector solar.",
+        "No pierdas de vista a los niños en el agua."
+    ],
+    "autores": [
+        {
+            "nombre": "Andrey Berrocal Gamboa",
+            "correo": "estudiante@utn.ac.cr",
+            "rol": "Desarrollador",
+            "foto": "fotos/Foto-Andrey.jpg"
+        },
+        {
+            "nombre": "Mónica Gutiérrez Borge",
+            "correo": "estudiante@utn.ac.cr",
+            "rol": "Desarrollador",
+            "foto": "fotos/fotoMonica.jpeg"
+        }
+    ],
+    "playas": [
+        {
+            "id": "jaco",
+            "nombre": "Playa Jacó",
+            "provincia": "Puntarenas",
+            "imagen": "https://castleofozcostarica.com/wp-content/uploads/2024/10/Where-to-Stay-in-Jaco-Costa-Rica5-1024x576.jpg.webp",
+            "video_id": "https://www.youtube.com/watch?v=u1j-m5WkAdQ",
+            "descripcion_riesgo": "Riesgo Alto: Playa abierta con corrientes de resaca constantes y muy fuertes. Precaución extrema cerca de la desembocadura de los ríos.",
+            "tips": [
+                "Nadar EXCLUSIVAMENTE frente a puestos de salvavidas",
+                "El agua no debe pasar de la cintura",
+                "Cuidado con los surfistas"
+            ],
+            "oleaje": "Alto",
+            "bandera": {
+                "color": "red",
+                "significado": "Peligro Alto"
+            },
+            "estadisticas": [
+                15,
+                20,
+                12,
+                8,
+                10,
+                18
+            ]
+        },
+        {
+            "id": "manuel-antonio",
+            "nombre": "Manuel Antonio",
+            "provincia": "Puntarenas",
+            "imagen": "https://es.visitcostarica.com/sites/default/files/2024-10/Aerial%20Drone%20view%20of%20Manuel%20Antonio%20National%20Park%20in%20Costa%20Rica.%20.jpg",
+            "video_id": "https://www.youtube.com/watch?v=M_avgkvznTk",
+            "descripcion_riesgo": "Riesgo Bajo: Bahía protegida con oleaje suave, ideal para familias. Sin embargo, manténgase alerta en Espadilla Norte.",
+            "tips": [
+                "Cuidado con la fauna (mapaches roban comida)",
+                "Hidratación constante",
+                "No alimentar animales"
+            ],
+            "oleaje": "Bajo",
+            "bandera": {
+                "color": "green",
+                "significado": "Seguro"
+            },
+            "estadisticas": [
+                2,
+                3,
+                1,
+                5,
+                2,
+                4
+            ]
+        },
+        {
+            "id": "cocles",
+            "nombre": "Playa Cocles",
+            "provincia": "Limón",
+            "imagen": "https://digitaltravelcouple.com/wp-content/uploads/2021/10/playa-cocles-costa-rica-shore.jpg",
+            "video_id": "https://www.youtube.com/watch?v=Dm9tdsPlecl",
+            "descripcion_riesgo": "Riesgo Medio/Alto: Famosa por el 'Salsa Brava'. Corrientes fuertes típicas del Caribe y fondo irregular con arrecifes.",
+            "tips": [
+                "Preguntar a locales antes de entrar",
+                "Cuidado con arrecifes y piedras",
+                "Zona popular de surf"
+            ],
+            "oleaje": "Medio",
+            "bandera": {
+                "color": "yellow",
+                "significado": "Precaución"
+            },
+            "estadisticas": [
+                8,
+                12,
+                6,
+                4,
+                7,
+                9
+            ]
+        },
+        {
+            "id": "tamarindo",
+            "nombre": "Playa Tamarindo",
+            "provincia": "Guanacaste",
+            "imagen": "https://upload.wikimedia.org/wikipedia/commons/c/cc/Costa_Rica_Playa_Tamarindo_and_Rivermouth_2007_Aerial_Photograph_Tamarindowiki_01.JPG",
+            "video_id": "https://www.youtube.com/watch?v=SbiR1elCHzs",
+            "descripcion_riesgo": "Riesgo Medio: Playa muy turística pero con zonas de rocas y corrientes en los extremos (Estero).",
+            "tips": [
+                "Cuidado con las rocas en marea baja",
+                "Respetar zonas de bañistas vs surfistas",
+                "Cuidado con cocodrilos cerca del estero"
+            ],
+            "oleaje": "Medio",
+            "bandera": {
+                "color": "yellow",
+                "significado": "Precaución"
+            },
+            "estadisticas": [
+                10,
+                15,
+                8,
+                12,
+                9,
+                11
+            ]
+        },
+        {
+            "id": "dominical",
+            "nombre": "Playa Dominical",
+            "provincia": "Puntarenas",
+            "imagen": "https://uniquevcr.com/wp-content/uploads/2023/03/dominical-costa-rica.jpeg",
+            "video_id": "https://www.youtube.com/watch?v=sT_PmYoyW41",
+            "descripcion_riesgo": "Riesgo Alto: Conocida por olas grandes y potentes. Recomendada principalmente para surfistas expertos, no para nadadores.",
+            "tips": [
+                "No recomendada para baño recreativo",
+                "Corrientes de retorno muy fuertes",
+                "Mantenerse en la orilla"
+            ],
+            "oleaje": "Muy Alto",
+            "bandera": {
+                "color": "red",
+                "significado": "Solo Expertos"
+            },
+            "estadisticas": [
+                5,
+                8,
+                4,
+                6,
+                3,
+                7
+            ]
+        }
+    ]
+}
