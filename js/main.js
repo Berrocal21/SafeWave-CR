@@ -322,12 +322,22 @@ function iniciarContacto() {
 }
 
 function initMap() {
-    if (!document.getElementById('map')) return;
-    const map = L.map('map').setView([9.998877, -84.733560], 14); // UTN Sede Central aprox
+    if (!document.getElementById('map')) return; // Escudo
+
+    // Coordenadas UTN Sede Central (Villa Bonita, Alajuela)
+    // Latitud: 10.0070, Longitud: -84.2167
+    const utnLat = 10.0070;
+    const utnLng = -84.2167;
+
+    const map = L.map('map').setView([utnLat, utnLng], 15); // Zoom 15 para ver detalles
+
     L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
         attribution: '&copy; OpenStreetMap contributors'
     }).addTo(map);
-    L.marker([9.998877, -84.733560]).addTo(map).bindPopup('SafeWave CR - Sede UTN').openPopup();
+
+    L.marker([utnLat, utnLng]).addTo(map)
+        .bindPopup('<b>Universidad Técnica Nacional</b><br>Sede Central<br>Alajuela, Costa Rica')
+        .openPopup();
 }
 
 function validarFormulario(e) {
