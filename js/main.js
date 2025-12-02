@@ -1,37 +1,41 @@
 console.log("SafeWave App Iniciada");
 
-// --- Global Variables ---
+// --- Variables Globales ---
 let appData = null;
-let currentChart = null; // Store chart instance to destroy/update
-let captchaCorrectAnswer = 0; // Store captcha answer
+let currentChart = null; // Instancia del gráfico para destruir/actualizar
+let autoPlayInterval;    // Para controlar el carrusel
 
-// --- Initialization ---
+// --- Inicialización ---
 document.addEventListener('DOMContentLoaded', async () => {
-    // Mobile menu toggle logic
+    // Menú móvil
     initMobileMenu();
 
-    // Fetch Data
+    // Carga de Datos (JSON)
     try {
         const response = await fetch('data/datos.json');
         if (!response.ok) throw new Error('Error al cargar datos.json');
         appData = await response.json();
         console.log("Datos cargados:", appData);
 
-        // Initialize Page Specific Logic
-        // We call functions, and let them handle their own existence checks (Double Shielding)
-        initCarousel();
-        cargarConsejo();
-        cargarPilares();
-        cargarAutores();
-        iniciarSimulador();
-        iniciarContacto();
+        // --- LÓGICA DE LA PÁGINA DE INICIO (NUEVO) ---
+        initCarousel();             // Requerimiento: Carrusel funcional
+        cargarCintaAlertas();       // Interacción JS #1: Cinta de noticias (Ticker)
+        cargarMonitorEstadistico(); // Interacción JS #2: Monitor de riesgo
+        cargarPilares();            // Contenido desde JSON
+        cargarConsejo();            // Consejo del día
+
+        // --- LÓGICA DE OTRAS PÁGINAS (EXISTENTE) ---
+        cargarAutores();            // Página Acerca de
+        iniciarSimulador();         // Página Centro de Seguridad
+        if (typeof cargarGuiaBanderas === 'function') cargarGuiaBanderas(); // Si implementaste la guía
+        iniciarContacto();          // Página Contacto
 
     } catch (error) {
         console.error("Error inicializando la app:", error);
     }
 });
 
-// --- Mobile Menu ---
+// --- Menú Móvil ---
 function initMobileMenu() {
     const btn = document.querySelector('button[aria-controls="mobile-menu"]');
     const menu = document.getElementById('mobile-menu');
@@ -45,181 +49,164 @@ function initMobileMenu() {
     }
 }
 
+// ==========================================
+// SECCIÓN: PÁGINA DE INICIO (REQUERIMIENTOS)
+// ==========================================
 
-// --- Pillars Logic ---
-function cargarPilares() {
-    const container = document.getElementById('pilares-container');
-    if (!container) return; // Shield
-
-    if (!appData || !appData.pilares || appData.pilares.length === 0) {
-        container.innerHTML = '<p class="text-center col-span-3">No hay información de pilares.</p>';
-        return;
-    }
-
-    container.innerHTML = appData.pilares.map(pilar => `
-        <div class="bg-white p-8 rounded-xl shadow-md hover:shadow-xl transition-shadow duration-300 text-center border border-gray-100 group">
-            <div class="inline-flex items-center justify-center w-16 h-16 rounded-full bg-blue-100 text-primary mb-6 group-hover:scale-110 transition-transform duration-300">
-                <i class="${pilar.icono} text-3xl"></i>
-            </div>
-            <h3 class="text-xl font-bold text-gray-800 mb-3">${pilar.titulo}</h3>
-            <p class="text-gray-600 leading-relaxed">
-                ${pilar.descripcion}
-            </p>
-        </div>
-    `).join('');
-}
-
-// --- Carousel Logic ---
+// --- 1. Lógica del Carrusel Mejorado ---
 function initCarousel() {
     const slidesContainer = document.getElementById('carousel-slides');
     const indicatorsContainer = document.getElementById('carousel-indicators');
-    const prevBtn = document.getElementById('prev-slide');
-    const nextBtn = document.getElementById('next-slide');
+    
+    // Escudo: Si no existen los elementos en esta página, salir.
+    if (!slidesContainer || !indicatorsContainer || !appData?.carrusel) return;
 
-    // Shield: If any critical element is missing, stop.
-    if (!slidesContainer || !indicatorsContainer || !prevBtn || !nextBtn) return;
-    if (!appData || !appData.carrusel || appData.carrusel.length === 0) return;
-
-    let currentSlide = 0;
-    const slides = appData.carrusel;
-    const totalSlides = slides.length;
-    let autoPlayInterval;
-
-    // Render Slides
-    slidesContainer.innerHTML = slides.map((slide, index) => `
-        <div class="absolute inset-0 transition-opacity duration-1000 ease-in-out ${index === 0 ? 'opacity-100' : 'opacity-0'} slide-item" data-index="${index}">
-            <img src="${slide.src}" alt="${slide.titulo}" class="w-full h-full object-cover">
-            <div class="absolute inset-0 bg-black bg-opacity-40 flex items-center justify-center">
-                <div class="text-center text-white px-4">
-                    <h2 class="text-4xl font-bold mb-2 drop-shadow-lg">${slide.titulo}</h2>
-                    <p class="text-xl drop-shadow-md">${slide.descripcion}</p>
-                </div>
+    // Renderizar Slides
+    slidesContainer.innerHTML = appData.carrusel.map((slide, i) => `
+        <div class="absolute inset-0 transition-opacity duration-700 ease-in-out ${i === 0 ? 'opacity-100 z-10' : 'opacity-0 z-0'} slide-item" data-index="${i}">
+            <img src="${slide.src}" alt="${slide.titulo}" class="w-full h-full object-cover brightness-75">
+            <div class="absolute inset-0 flex flex-col items-center justify-center text-center text-white p-4 bg-black/30">
+                <h2 class="text-4xl md:text-5xl font-bold mb-4 drop-shadow-lg">${slide.titulo}</h2>
+                <p class="text-xl md:text-2xl drop-shadow-md max-w-2xl">${slide.descripcion}</p>
             </div>
         </div>
     `).join('');
 
-    // Render Indicators
-    indicatorsContainer.innerHTML = slides.map((_, index) => `
-        <button class="w-3 h-3 rounded-full transition-colors ${index === 0 ? 'bg-white' : 'bg-white bg-opacity-50 hover:bg-opacity-75'}" data-index="${index}" aria-label="Slide ${index + 1}"></button>
+    // Renderizar Indicadores
+    indicatorsContainer.innerHTML = appData.carrusel.map((_, i) => `
+        <button class="w-3 h-3 rounded-full transition-all ${i === 0 ? 'bg-secondary w-6' : 'bg-white/50 hover:bg-white'}" data-index="${i}" aria-label="Slide ${i + 1}"></button>
     `).join('');
 
-    const slideElements = document.querySelectorAll('.slide-item');
-    const indicatorElements = indicatorsContainer.querySelectorAll('button');
+    // Control del Carrusel
+    let currentSlide = 0;
+    const items = document.querySelectorAll('.slide-item');
+    const dots = indicatorsContainer.querySelectorAll('button');
+    
+    const showSlide = (index) => {
+        if (index >= items.length) index = 0;
+        if (index < 0) index = items.length - 1;
+        
+        items.forEach(el => { el.classList.remove('opacity-100', 'z-10'); el.classList.add('opacity-0', 'z-0'); });
+        dots.forEach(d => { d.classList.remove('bg-secondary', 'w-6'); d.classList.add('bg-white/50'); });
+        
+        items[index].classList.remove('opacity-0', 'z-0');
+        items[index].classList.add('opacity-100', 'z-10');
+        dots[index].classList.remove('bg-white/50');
+        dots[index].classList.add('bg-secondary', 'w-6');
+        
+        currentSlide = index;
+    };
 
-    function showSlide(index) {
-        // Handle wrapping
-        if (index >= totalSlides) currentSlide = 0;
-        else if (index < 0) currentSlide = totalSlides - 1;
-        else currentSlide = index;
-
-        // Update DOM
-        slideElements.forEach(el => el.classList.remove('opacity-100'));
-        slideElements.forEach(el => el.classList.add('opacity-0'));
-
-        if (slideElements[currentSlide]) {
-            slideElements[currentSlide].classList.remove('opacity-0');
-            slideElements[currentSlide].classList.add('opacity-100');
-        }
-
-        // Update Indicators
-        indicatorElements.forEach((el, idx) => {
-            if (idx === currentSlide) {
-                el.classList.remove('bg-opacity-50');
-                el.classList.add('bg-white');
-            } else {
-                el.classList.add('bg-opacity-50');
-                el.classList.remove('bg-white');
-            }
-        });
-    }
-
-    function nextSlide() {
-        showSlide(currentSlide + 1);
-    }
-
-    function prevSlide() {
-        showSlide(currentSlide - 1);
-    }
-
-    function startAutoPlay() {
-        stopAutoPlay(); // Clear existing to be safe
-        autoPlayInterval = setInterval(nextSlide, 5000);
-    }
-
-    function stopAutoPlay() {
-        if (autoPlayInterval) clearInterval(autoPlayInterval);
-    }
-
-    // Event Listeners
-    nextBtn.addEventListener('click', () => {
-        nextSlide();
-        startAutoPlay(); // Reset timer on manual interaction
+    // Listeners
+    document.getElementById('next-slide')?.addEventListener('click', () => { showSlide(currentSlide + 1); resetTimer(); });
+    document.getElementById('prev-slide')?.addEventListener('click', () => { showSlide(currentSlide - 1); resetTimer(); });
+    
+    dots.forEach((dot, idx) => {
+        dot.addEventListener('click', () => { showSlide(idx); resetTimer(); });
     });
 
-    prevBtn.addEventListener('click', () => {
-        prevSlide();
-        startAutoPlay();
-    });
-
-    indicatorElements.forEach(ind => {
-        ind.addEventListener('click', (e) => {
-            const index = parseInt(e.target.dataset.index);
-            showSlide(index);
-            startAutoPlay();
-        });
-    });
-
-    // Start
-    startAutoPlay();
+    // Auto Play
+    const startTimer = () => { autoPlayInterval = setInterval(() => showSlide(currentSlide + 1), 5000); };
+    const resetTimer = () => { clearInterval(autoPlayInterval); startTimer(); };
+    startTimer();
 }
 
-// --- Read More Logic ---
-// Exposed globally because it's called via onclick in HTML
+// --- 2. Interacción Novedosa A: Cinta de Alertas (Ticker) ---
+function cargarCintaAlertas() {
+    const container = document.getElementById('cinta-alertas');
+    if (!container || !appData?.playas) return;
+
+    // Crear string de alertas basado en banderas
+    const alertas = appData.playas.map(playa => {
+        let icon = playa.bandera.color === 'red' ? '<i class="fa-solid fa-circle text-red-500"></i>' : 
+                  (playa.bandera.color === 'yellow' ? '<i class="fa-solid fa-circle text-yellow-400"></i>' : 
+                   '<i class="fa-solid fa-circle text-green-500"></i>');
+        return `<span class="mx-6 font-medium flex items-center gap-2 inline-flex">${icon} ${playa.nombre}: ${playa.bandera.significado.toUpperCase()}</span>`;
+    }).join(' | ');
+
+    // Duplicar contenido para efecto infinito suave
+    container.innerHTML = `<div class="inline-block">${alertas} | ${alertas}</div>`;
+}
+
+// --- 3. Interacción Novedosa B: Monitor Estadístico ---
+function cargarMonitorEstadistico() {
+    const container = document.getElementById('stats-dashboard');
+    if (!container || !appData?.playas) return;
+
+    // Calcular estadísticas en tiempo real
+    const total = appData.playas.length;
+    const highRisk = appData.playas.filter(p => p.bandera.color === 'red').length;
+    const mediumRisk = appData.playas.filter(p => p.bandera.color === 'yellow').length;
+    const safe = total - (highRisk + mediumRisk);
+
+    const stats = [
+        { label: 'Playas Monitoreadas', val: total, icon: 'fa-umbrella-beach', color: 'text-blue-400' },
+        { label: 'Alto Riesgo', val: highRisk, icon: 'fa-triangle-exclamation', color: 'text-red-500' },
+        { label: 'Precaución', val: mediumRisk, icon: 'fa-flag', color: 'text-yellow-400' },
+        { label: 'Condición Segura', val: safe, icon: 'fa-check-circle', color: 'text-green-500' }
+    ];
+
+    container.innerHTML = stats.map(stat => `
+        <div class="bg-gray-800 rounded-xl p-4 border border-gray-700 hover:border-gray-500 transition-colors transform hover:-translate-y-1 duration-300">
+            <i class="fa-solid ${stat.icon} ${stat.color} text-3xl mb-2"></i>
+            <div class="text-3xl font-bold text-white">${stat.val}</div>
+            <div class="text-xs text-gray-400 uppercase tracking-widest mt-1">${stat.label}</div>
+        </div>
+    `).join('');
+}
+
+// --- 4. Cargar Pilares (Contenido JSON) ---
+function cargarPilares() {
+    const container = document.getElementById('pilares-container');
+    if (!container || !appData?.pilares) return;
+
+    container.innerHTML = appData.pilares.map(pilar => `
+        <div class="bg-white p-8 rounded-xl shadow-lg border-t-4 border-secondary hover:-translate-y-2 transition-transform duration-300 group">
+            <div class="w-16 h-16 bg-blue-50 rounded-full flex items-center justify-center text-primary text-2xl mb-6 mx-auto group-hover:scale-110 transition-transform">
+                <i class="${pilar.icono}"></i>
+            </div>
+            <h3 class="text-xl font-bold text-center text-gray-800 mb-3">${pilar.titulo}</h3>
+            <p class="text-gray-600 text-center text-sm leading-relaxed">${pilar.descripcion}</p>
+        </div>
+    `).join('');
+}
+
+// --- 5. Funcionalidad "Leer Más" ---
 window.toggleLeerMas = function () {
     const textElement = document.getElementById('intro-text');
     const btnElement = document.getElementById('btn-leer-mas');
-
     if (!textElement || !btnElement) return;
 
-    // Check if currently expanded (we use max-h style to toggle)
     const isExpanded = textElement.style.maxHeight === 'none';
-
+    const span = btnElement.querySelector('span') || btnElement; // Soporte para el botón complejo o simple
+    
     if (isExpanded) {
-        // Collapse
-        textElement.style.maxHeight = '4.5em'; // Approx 3 lines depending on line-height
-        btnElement.textContent = 'Leer más';
+        textElement.style.maxHeight = '6em'; 
+        if(btnElement.tagName === 'BUTTON') span.textContent = 'Leer más';
     } else {
-        // Expand
         textElement.style.maxHeight = 'none';
-        btnElement.textContent = 'Leer menos';
+        if(btnElement.tagName === 'BUTTON') span.textContent = 'Leer menos';
     }
 };
 
-// --- Tip of the Day Logic ---
+// --- 6. Consejo del Día ---
 function cargarConsejo() {
     const container = document.getElementById('consejo-texto');
-    if (!container) return; // Shield
-
-    if (!appData || !appData.consejos || appData.consejos.length === 0) {
-        container.textContent = "No hay consejos disponibles.";
-        return;
-    }
+    if (!container || !appData?.consejos) return;
 
     const randomIndex = Math.floor(Math.random() * appData.consejos.length);
-    const consejo = appData.consejos[randomIndex];
-
-    container.textContent = `"${consejo}"`;
+    container.textContent = `"${appData.consejos[randomIndex]}"`;
 }
 
-// --- Authors Logic ---
+
+// ==========================================
+// SECCIÓN: OTRAS PÁGINAS (FUNCIONALIDAD BASE)
+// ==========================================
+
+// --- Autores (Acerca de) ---
 function cargarAutores() {
     const container = document.getElementById('autores-container');
-    if (!container) return; // Shield
-
-    if (!appData || !appData.autores || appData.autores.length === 0) {
-        container.innerHTML = '<p class="text-center col-span-2">No hay información de autores.</p>';
-        return;
-    }
+    if (!container || !appData?.autores) return;
 
     container.innerHTML = appData.autores.map(autor => `
         <div class="bg-white rounded-xl shadow-lg overflow-hidden transform hover:scale-105 transition-transform duration-300 border border-gray-100">
@@ -233,320 +220,162 @@ function cargarAutores() {
             <div class="pt-16 pb-6 px-6 text-center">
                 <h3 class="text-xl font-bold text-primary mb-1">${autor.nombre}</h3>
                 <p class="text-secondary font-medium text-sm mb-4">${autor.rol}</p>
-                <p class="text-gray-600 text-sm mb-4">Estudiante de Ingeniería del Software en la UTN. Apasionado por la tecnología y la seguridad.</p>
+                <p class="text-gray-600 text-sm mb-4">Estudiante de Ingeniería del Software en la UTN.</p>
                 <a href="mailto:${autor.correo}" class="inline-flex items-center text-accent hover:text-yellow-600 font-medium transition-colors">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
-                    </svg>
-                    ${autor.correo}
+                    <i class="fa-solid fa-envelope mr-2"></i> ${autor.correo}
                 </a>
             </div>
         </div>
     `).join('');
 }
 
-// --- Simulator Logic (Phase 3) ---
+// --- Simulador (Centro de Seguridad) ---
 function iniciarSimulador() {
     const select = document.getElementById('playa-select');
-    if (!select) return; // Shield
+    if (!select || !appData?.playas) return;
 
-    if (!appData || !appData.playas || appData.playas.length === 0) {
-        select.innerHTML = '<option disabled>No hay datos de playas</option>';
-        return;
-    }
+    // Llenar Select
+    select.innerHTML = appData.playas.map(playa => 
+        `<option value="${playa.id}">${playa.nombre}</option>`
+    ).join('');
 
-    // Populate Select
-    select.innerHTML = appData.playas.map(playa => `
-        <option value="${playa.id}">${playa.nombre}</option>
-    `).join('');
-
-    // Event Listener
-    select.addEventListener('change', (e) => {
-        actualizarSimulador(e.target.value);
-    });
-
-    // Initial Load (First beach)
-    actualizarSimulador(appData.playas[0].id);
+    select.addEventListener('change', (e) => actualizarSimulador(e.target.value));
+    actualizarSimulador(appData.playas[0].id); // Cargar primera playa
 }
 
 function actualizarSimulador(playaId) {
-    if (!appData || !appData.playas) return;
     const playa = appData.playas.find(p => p.id === playaId);
     if (!playa) return;
 
-    // Elements
-    const oleajeEl = document.getElementById('resultado-oleaje');
-    const banderaTextoEl = document.getElementById('resultado-bandera-texto');
-    const banderaColorEl = document.getElementById('resultado-bandera-color');
-    const riskCard = document.getElementById('card-riesgo');
-    const riskText = document.getElementById('resultado-riesgo');
-    const imagenEl = document.getElementById('resultado-imagen');
-    const videoEl = document.getElementById('resultado-video');
-
-    // Shield: Check if all elements exist
-    if (!oleajeEl || !banderaTextoEl || !banderaColorEl || !riskCard || !riskText) return;
-
-    // Update Multimedia if elements exist
-    if (imagenEl && playa.imagen) {
-        imagenEl.src = playa.imagen;
-        imagenEl.alt = `Vista de ${playa.nombre}`;
-    }
-
-    if (videoEl && playa.video_id) {
-        // Construct YouTube Embed URL
-        videoEl.src = `https://www.youtube.com/embed/${playa.video_id}?rel=0`;
-    }
-
-    // Update Text Fields
-    oleajeEl.textContent = playa.oleaje;
-    banderaTextoEl.textContent = playa.bandera.significado;
-
-    // Update Flag Color Indicator
-    const flagColorMap = {
-        'red': 'bg-red-500',
-        'yellow': 'bg-yellow-400',
-        'green': 'bg-green-500'
+    const elements = {
+        oleaje: document.getElementById('resultado-oleaje'),
+        banderaTxt: document.getElementById('resultado-bandera-texto'),
+        banderaCol: document.getElementById('resultado-bandera-color'),
+        riesgoCard: document.getElementById('card-riesgo'),
+        riesgoTxt: document.getElementById('resultado-riesgo'),
+        img: document.getElementById('resultado-imagen'),
+        video: document.getElementById('resultado-video')
     };
-    const colorClass = flagColorMap[playa.bandera.color] || 'bg-gray-300';
-    banderaColorEl.className = `w-4 h-4 rounded-full block ${colorClass}`;
 
-    // Update Risk Card Styling
-    // Reset classes
-    riskCard.className = 'rounded-lg p-6 border-2 shadow-sm transition-colors duration-300';
+    if (!elements.oleaje) return; // Escudo parcial
 
-    if (playa.bandera.color === 'red') {
-        riskCard.classList.add('bg-red-50', 'border-red-500');
-        riskText.className = "text-xl font-bold text-red-700 mt-2";
-    } else if (playa.bandera.color === 'yellow') {
-        riskCard.classList.add('bg-yellow-50', 'border-yellow-500');
-        riskText.className = "text-xl font-bold text-yellow-700 mt-2";
-    } else {
-        riskCard.classList.add('bg-green-50', 'border-green-500');
-        riskText.className = "text-xl font-bold text-green-700 mt-2";
-    }
+    // Actualizar Texto y Multimedia
+    elements.oleaje.textContent = playa.oleaje;
+    elements.banderaTxt.textContent = playa.bandera.significado;
+    if (elements.img) { elements.img.src = playa.imagen; elements.img.alt = playa.nombre; }
+    if (elements.video) elements.video.src = `https://www.youtube.com/embed/${playa.video_id}?rel=0`;
 
-    // Use specific risk description if available, otherwise fallback to generic
-    if (playa.descripcion_riesgo) {
-        riskText.textContent = playa.descripcion_riesgo;
-        riskText.classList.remove('text-xl'); // Adjust size for longer text
-        riskText.classList.add('text-md');
-    } else {
-        // Fallback
-        if (playa.bandera.color === 'red') riskText.textContent = "ALTO RIESGO - NO INGRESAR";
-        else if (playa.bandera.color === 'yellow') riskText.textContent = "PRECAUCIÓN - NADAR CON CUIDADO";
-        else riskText.textContent = "CONDICIONES FAVORABLES";
-    }
+    // Colores y Estilos
+    const colors = { 'red': 'bg-red-500', 'yellow': 'bg-yellow-400', 'green': 'bg-green-500' };
+    const borderColors = { 'red': 'border-red-500 bg-red-50', 'yellow': 'border-yellow-500 bg-yellow-50', 'green': 'border-green-500 bg-green-50' };
+    
+    elements.banderaCol.className = `w-4 h-4 rounded-full block ${colors[playa.bandera.color] || 'bg-gray-300'}`;
+    elements.riesgoCard.className = `rounded-lg p-6 border-2 shadow-sm transition-colors duration-300 ${borderColors[playa.bandera.color]}`;
+    
+    // Texto de Riesgo
+    elements.riesgoTxt.className = `text-lg font-bold mt-2 ${playa.bandera.color === 'red' ? 'text-red-700' : (playa.bandera.color === 'yellow' ? 'text-yellow-700' : 'text-green-700')}`;
+    elements.riesgoTxt.textContent = playa.descripcion_riesgo || "Información no disponible";
 
-    // Update Chart
     actualizarGrafico(playa);
 }
 
 function actualizarGrafico(playa) {
     const canvas = document.getElementById('grafico-accidentes');
-    if (!canvas) return; // Shield
+    if (!canvas) return;
 
     const ctx = canvas.getContext('2d');
+    if (currentChart) currentChart.destroy();
 
-    // Destroy previous chart if exists
-    if (currentChart) {
-        currentChart.destroy();
-    }
-
-    // Create new chart
     currentChart = new Chart(ctx, {
         type: 'bar',
         data: {
             labels: ['Ene', 'Feb', 'Mar', 'Abr', 'May', 'Jun'],
             datasets: [{
-                label: `Incidentes en ${playa.nombre} (Últimos 6 meses)`,
+                label: `Incidentes en ${playa.nombre}`,
                 data: playa.estadisticas,
-                backgroundColor: '#06b6d4', // Secondary color
-                borderColor: '#1e3a8a',     // Primary color
+                backgroundColor: '#06b6d4',
+                borderColor: '#1e3a8a',
                 borderWidth: 1
             }]
         },
         options: {
             responsive: true,
             maintainAspectRatio: false,
-            scales: {
-                y: {
-                    beginAtZero: true,
-                    title: {
-                        display: true,
-                        text: 'Número de Incidentes'
-                    }
-                }
-            },
-            plugins: {
-                legend: {
-                    labels: {
-                        font: {
-                            family: 'Inter'
-                        }
-                    }
-                }
-            }
+            scales: { y: { beginAtZero: true } }
         }
     });
 }
 
-// --- Contact Form Logic (Phase 4) ---
+// --- Contacto (Formulario y Mapa) ---
 function iniciarContacto() {
-    // 1. Initialize Map
     initMap();
-
-    // 2. Generate Captcha (Removed - using Google reCAPTCHA)
-    // generarCaptcha();
-
-    // 3. Form Validation
+    
     const form = document.getElementById('contacto-form');
-    if (form) {
-        form.addEventListener('submit', validarFormulario);
-    }
+    if (form) form.addEventListener('submit', validarFormulario);
 
-    // Modal Close Button
     const btnCerrar = document.getElementById('btn-cerrar-modal');
     if (btnCerrar) {
         btnCerrar.addEventListener('click', () => {
-            const modal = document.getElementById('modal-exito');
-            if (modal) modal.classList.add('hidden');
+            document.getElementById('modal-exito').classList.add('hidden');
         });
     }
 }
 
 function initMap() {
-    if (!document.getElementById('map')) return; // Shield
-
-    // Coordinates for Costa Rica (San José approx)
-    const lat = 9.7489;
-    const lng = -83.7534;
-
-    const map = L.map('map').setView([lat, lng], 8);
-
+    if (!document.getElementById('map')) return;
+    const map = L.map('map').setView([9.998877, -84.733560], 14); // UTN Sede Central aprox
     L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-        attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+        attribution: '&copy; OpenStreetMap contributors'
     }).addTo(map);
-
-    L.marker([lat, lng]).addTo(map)
-        .bindPopup('SafeWave CR - Oficinas Centrales (UTN)')
-        .openPopup();
+    L.marker([9.998877, -84.733560]).addTo(map).bindPopup('SafeWave CR - Sede UTN').openPopup();
 }
-
-// function generarCaptcha() { ... } Removed in favor of Google reCAPTCHA
 
 function validarFormulario(e) {
     e.preventDefault();
     let isValid = true;
-
-    // Helper to show/hide error
     const toggleError = (id, show) => {
         const el = document.getElementById(id);
-        const errorText = document.getElementById(`error-${id}`);
-        if (!el || !errorText) return; // Shield
-
-        if (show) {
-            el.classList.add('border-red-500');
-            el.classList.remove('border-gray-300');
-            errorText.classList.remove('hidden');
-        } else {
-            el.classList.remove('border-red-500');
-            el.classList.add('border-gray-300');
-            errorText.classList.add('hidden');
+        const err = document.getElementById(`error-${id}`);
+        if(el && err) {
+            el.classList.toggle('border-red-500', show);
+            err.classList.toggle('hidden', !show);
         }
     };
 
-    // 1. Validate Name
-    const nombreEl = document.getElementById('nombre');
-    if (nombreEl) {
-        const nombre = nombreEl.value.trim();
-        if (nombre === '') {
-            toggleError('nombre', true);
-            isValid = false;
-        } else {
-            toggleError('nombre', false);
-        }
-    }
+    // Validaciones básicas
+    const nombre = document.getElementById('nombre');
+    if(nombre && nombre.value.trim() === '') { toggleError('nombre', true); isValid = false; } else toggleError('nombre', false);
 
-    // 2. Validate Email
-    const correoEl = document.getElementById('correo');
-    if (correoEl) {
-        const correo = correoEl.value.trim();
-        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-        if (!emailRegex.test(correo)) {
-            toggleError('correo', true);
-            isValid = false;
-        } else {
-            toggleError('correo', false);
-        }
-    }
+    const correo = document.getElementById('correo');
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if(correo && !emailRegex.test(correo.value)) { toggleError('correo', true); isValid = false; } else toggleError('correo', false);
 
-    // 3. Validate Subject
-    const asuntoEl = document.getElementById('asunto');
-    if (asuntoEl) {
-        const asunto = asuntoEl.value.trim();
-        if (asunto === '') {
-            toggleError('asunto', true);
-            isValid = false;
-        } else {
-            toggleError('asunto', false);
-        }
-    }
+    const mensaje = document.getElementById('mensaje');
+    if(mensaje && mensaje.value.trim() === '') { toggleError('mensaje', true); isValid = false; } else toggleError('mensaje', false);
 
-    // 4. Validate Message
-    const mensajeEl = document.getElementById('mensaje');
-    if (mensajeEl) {
-        const mensaje = mensajeEl.value.trim();
-        if (mensaje === '') {
-            toggleError('mensaje', true);
-            isValid = false;
-        } else {
-            toggleError('mensaje', false);
-        }
-    }
-
-    // 5. Validate Captcha (Google reCAPTCHA v2)
-    const errorText = document.getElementById('error-captcha');
-
-    // Check if reCAPTCHA is loaded
+    // Validación reCAPTCHA
+    const captchaErr = document.getElementById('error-captcha');
     if (typeof grecaptcha !== 'undefined') {
-        const response = grecaptcha.getResponse();
-        if (response.length === 0) {
-            if (errorText) {
-                errorText.classList.remove('hidden');
-                errorText.textContent = "Por favor, verifica que no eres un robot.";
-            }
+        if (grecaptcha.getResponse().length === 0) {
+            if(captchaErr) captchaErr.classList.remove('hidden');
             isValid = false;
         } else {
-            if (errorText) errorText.classList.add('hidden');
+            if(captchaErr) captchaErr.classList.add('hidden');
         }
-    } else {
-        console.warn("reCAPTCHA no cargado");
-        // Optional: Fail safe or allow if script blocked? 
-        // For strict security, we fail.
-        if (errorText) {
-            errorText.classList.remove('hidden');
-            errorText.textContent = "Error al cargar el captcha. Intente recargar la página.";
-        }
-        isValid = false;
     }
 
     if (isValid) {
-        const nombreVal = nombreEl ? nombreEl.value : 'Usuario';
-        const asuntoVal = asuntoEl ? asuntoEl.value : 'Mensaje';
-        mostrarModalExito(nombreVal, asuntoVal);
+        mostrarModalExito(nombre ? nombre.value : 'Usuario', 'Mensaje Enviado');
         e.target.reset();
-        if (typeof grecaptcha !== 'undefined') grecaptcha.reset(); // Reset reCAPTCHA
+        if (typeof grecaptcha !== 'undefined') grecaptcha.reset();
     }
 }
 
 function mostrarModalExito(nombre, asunto) {
     const modal = document.getElementById('modal-exito');
-    const modalNombre = document.getElementById('modal-nombre');
-    const modalAsunto = document.getElementById('modal-asunto');
-
-    if (modal && modalNombre && modalAsunto) {
-        modalNombre.textContent = nombre;
-        modalAsunto.textContent = asunto;
+    if (modal) {
+        document.getElementById('modal-nombre').textContent = nombre;
+        document.getElementById('modal-asunto').textContent = asunto;
         modal.classList.remove('hidden');
     }
 }

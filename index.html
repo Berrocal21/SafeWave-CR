@@ -4,220 +4,312 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Acerca de - SafeWave CR</title>
+    <title>Inicio - SafeWave CR</title>
 
-    <!-- Google Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;800&display=swap" rel="stylesheet">
 
-    <!-- Tailwind CSS -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
     <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: '#1e3a8a',   // Océano Profundo
+                        secondary: '#06b6d4', // Turquesa Claro
+                        accent: '#f59e0b',    // Amarillo Sol
+                    },
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                    },
+                    animation: {
+                        marquee: 'marquee 25s linear infinite',
+                    },
+                    keyframes: {
+                        marquee: {
+                            '0%': { transform: 'translateX(100%)' },
+                            '100%': { transform: 'translateX(-100%)' },
+                        }
+                    }
+                }
+            }
+        }
+    </script>
 
-    <!-- Tailwind Configuration -->
-
-    <!-- Custom CSS -->
     <link rel="stylesheet" href="css/styles.css">
 
-    <!-- Main JS (Defer to ensure DOM is ready) -->
     <script src="js/main.js" defer></script>
 </head>
 
-<body
-    class="bg-[radial-gradient(ellipse_at_top_right,_var(--tw-gradient-stops))] from-cyan-100 via-blue-50 to-white min-h-screen text-gray-800 flex flex-col">
+<body class="bg-gray-50 font-sans text-gray-800 flex flex-col min-h-screen">
 
-    <!-- Navbar (White Background, Primary Text) -->
-    <nav class="bg-white shadow-md sticky top-0 z-50">
+    <nav class="bg-white/95 backdrop-blur-sm shadow-sm sticky top-0 z-50 transition-all duration-300">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="flex items-center justify-between h-20">
-                <!-- Logo -->
-                <div class="flex items-center">
-                    <div class="flex-shrink-0 flex items-center gap-3">
-                        <img src="fotos/Logo.png" alt="SafeWave CR Logo" class="h-16 w-auto object-contain">
-                        <span class="font-bold text-2xl tracking-wider text-primary hidden sm:block">SafeWave CR</span>
-                    </div>
-                    <!-- Desktop Menu -->
-                    <div class="hidden md:block">
-                        <div class="ml-10 flex items-baseline space-x-4">
-                            <a href="index.html"
-                                class="text-primary font-bold border-b-2 border-secondary px-3 py-2 text-sm">Inicio</a>
-                            <a href="acerca.html"
-                                class="text-primary hover:text-blue-900 hover:bg-blue-50 px-3 py-2 rounded-md text-sm font-medium transition-colors">Acerca
-                                de</a>
-                            <a href="propuesta.html"
-                                class="text-primary hover:text-blue-900 hover:bg-blue-50 px-3 py-2 rounded-md text-sm font-medium transition-colors">Centro
-                                de Seguridad</a>
-                            <a href="contacto.html"
-                                class="text-primary hover:text-blue-900 hover:bg-blue-50 px-3 py-2 rounded-md text-sm font-medium transition-colors">Contacto</a>
-                        </div>
+                <div class="flex items-center group">
+                    <a href="index.html" class="flex-shrink-0 flex items-center gap-3">
+                        <img src="fotos/Logo.png" alt="SafeWave CR Logo" class="h-14 w-auto object-contain transition-transform group-hover:scale-105">
+                        <span class="font-extrabold text-2xl tracking-tight text-primary hidden sm:block">SafeWave <span class="text-secondary">CR</span></span>
+                    </a>
+                </div>
+                
+                <div class="hidden md:block">
+                    <div class="ml-10 flex items-center space-x-6">
+                        <a href="index.html" class="text-primary font-bold border-b-2 border-secondary px-1 py-1 text-sm">Inicio</a>
+                        <a href="acerca.html" class="text-gray-600 hover:text-primary hover:bg-blue-50 px-3 py-2 rounded-lg text-sm font-medium transition-all">Acerca de</a>
+                        <a href="propuesta.html" class="text-gray-600 hover:text-primary hover:bg-blue-50 px-3 py-2 rounded-lg text-sm font-medium transition-all">Centro de Seguridad</a>
+                        <a href="contacto.html" class="px-5 py-2.5 rounded-full bg-primary text-white text-sm font-semibold shadow-md hover:bg-blue-900 hover:shadow-lg transition-all transform hover:-translate-y-0.5">Contacto</a>
                     </div>
                 </div>
 
-                <!-- Mobile menu button -->
                 <div class="-mr-2 flex md:hidden">
-                    <button type="button"
-                        class="bg-white inline-flex items-center justify-center p-2 rounded-md text-primary hover:text-blue-900 hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary transition-colors"
-                        aria-controls="mobile-menu" aria-expanded="false">
-                        <span class="sr-only">Abrir menú principal</span>
-                        <svg class="block h-6 w-6" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
-                            stroke="currentColor" aria-hidden="true">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                d="M4 6h16M4 12h16M4 18h16" />
+                    <button type="button" class="bg-white inline-flex items-center justify-center p-2 rounded-md text-primary hover:text-blue-900 hover:bg-gray-100 focus:outline-none" aria-controls="mobile-menu" aria-expanded="false">
+                        <span class="sr-only">Abrir menú</span>
+                        <svg class="block h-7 w-7" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
                         </svg>
                     </button>
                 </div>
             </div>
         </div>
 
-        <!-- Mobile menu -->
-        <div class="md:hidden hidden bg-white border-t border-gray-100" id="mobile-menu">
-            <div class="px-2 pt-2 pb-3 space-y-1 sm:px-3">
-                <a href="index.html"
-                    class="text-primary font-bold block px-3 py-2 rounded-md text-base border-l-4 border-secondary bg-blue-50">Inicio</a>
-                <a href="acerca.html"
-                    class="text-primary hover:text-blue-900 hover:bg-gray-50 block px-3 py-2 rounded-md text-base font-medium">Acerca
-                    de</a>
-                <a href="propuesta.html"
-                    class="text-primary hover:text-blue-900 hover:bg-gray-50 block px-3 py-2 rounded-md text-base font-medium">Centro
-                    de Seguridad</a>
-                <p class="text-gray-600">Cargando carrusel...</p>
+        <div class="md:hidden hidden bg-white border-t border-gray-100 absolute w-full shadow-lg" id="mobile-menu">
+            <div class="px-4 pt-2 pb-6 space-y-2">
+                <a href="index.html" class="block px-3 py-3 rounded-md text-base font-bold text-primary bg-blue-50 border-l-4 border-secondary">Inicio</a>
+                <a href="acerca.html" class="block px-3 py-3 rounded-md text-base font-medium text-gray-600 hover:bg-gray-50 hover:text-primary">Acerca de</a>
+                <a href="propuesta.html" class="block px-3 py-3 rounded-md text-base font-medium text-gray-600 hover:bg-gray-50 hover:text-primary">Centro de Seguridad</a>
+                <a href="contacto.html" class="block px-3 py-3 rounded-md text-base font-medium text-white bg-primary text-center mt-4">Contacto</a>
             </div>
         </div>
     </nav>
 
-    <!-- Main Content -->
     <main class="flex-grow">
 
-        <!-- Carousel Section -->
-        <section class="relative h-[600px] overflow-hidden group">
-            <div id="carousel-slides" class="absolute inset-0 w-full h-full bg-gray-200">
-                <!-- Slides injected by JS -->
+        <div class="bg-primary text-white text-sm py-2 overflow-hidden relative shadow-inner z-40 border-b border-blue-900">
+            <div class="flex whitespace-nowrap animate-marquee" id="cinta-alertas">
+                <span class="mx-4">Conectando con el sistema de monitoreo de playas...</span>
             </div>
+        </div>
 
-            <!-- Navigation Arrows -->
-            <button id="prev-slide"
-                class="absolute left-4 top-1/2 transform -translate-y-1/2 bg-black bg-opacity-50 text-white p-3 rounded-full hover:bg-opacity-75 transition-all z-20 opacity-0 group-hover:opacity-100">
-                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24"
-                    stroke="currentColor">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
-                </svg>
+        <section class="relative h-[85vh] max-h-[700px] min-h-[500px] overflow-hidden group bg-gray-900">
+            <div id="carousel-slides" class="absolute inset-0 w-full h-full opacity-90">
+                </div>
+            
+            <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent pointer-events-none"></div>
+
+            <button id="prev-slide" class="absolute left-4 md:left-8 top-1/2 transform -translate-y-1/2 bg-white/20 backdrop-blur-md border border-white/30 text-white p-3 md:p-4 rounded-full hover:bg-white hover:text-primary transition-all duration-300 z-20 hover:scale-110">
+                <i class="fa-solid fa-chevron-left text-xl"></i>
             </button>
-            <button id="next-slide"
-                class="absolute right-4 top-1/2 transform -translate-y-1/2 bg-black bg-opacity-50 text-white p-3 rounded-full hover:bg-opacity-75 transition-all z-20 opacity-0 group-hover:opacity-100">
-                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24"
-                    stroke="currentColor">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
-                </svg>
+            <button id="next-slide" class="absolute right-4 md:right-8 top-1/2 transform -translate-y-1/2 bg-white/20 backdrop-blur-md border border-white/30 text-white p-3 md:p-4 rounded-full hover:bg-white hover:text-primary transition-all duration-300 z-20 hover:scale-110">
+                <i class="fa-solid fa-chevron-right text-xl"></i>
             </button>
 
-            <!-- Indicators -->
-            <div id="carousel-indicators"
-                class="absolute bottom-6 left-1/2 transform -translate-x-1/2 flex space-x-3 z-20">
-                <!-- Indicators injected by JS -->
-            </div>
+            <div id="carousel-indicators" class="absolute bottom-8 left-1/2 transform -translate-x-1/2 flex space-x-3 z-20">
+                </div>
         </section>
 
-        <!-- Intro Text Section -->
-        <section class="py-12 bg-white">
-            <div class="max-w-4xl mx-auto px-4 text-center">
-                <p id="intro-text"
-                    class="text-gray-700 text-lg leading-relaxed overflow-hidden transition-all duration-500 max-h-[6em]">
-                    Las corrientes de resaca son canales potentes y estrechos de agua que fluyen rápidamente desde
-                    la orilla hacia el mar. Son responsables de la mayoría de los rescates realizados por salvavidas
-                    en playas de todo el mundo. A menudo, los bañistas desprevenidos entran en el agua sin darse
-                    cuenta del peligro, ya que estas corrientes pueden parecer zonas de calma entre las olas
-                    rompientes. Sin embargo, su fuerza es suficiente para arrastrar incluso a los nadadores más
-                    experimentados mar adentro, provocando pánico y agotamiento, lo cual es la verdadera causa de
-                    ahogamiento. Identificarlas visualmente por su coloración diferente o la espuma en la superficie
-                    es vital para la prevención.
-                </p>
-                <div class="mt-6">
-                    <button id="btn-leer-mas" onclick="toggleLeerMas()"
-                        class="bg-accent hover:bg-yellow-500 text-white font-bold py-2 px-8 rounded-full transition-colors shadow-md transform hover:scale-105">
-                        Leer más
-                    </button>
+        <section class="py-20 bg-white relative overflow-hidden">
+            <div class="absolute top-0 right-0 -mt-20 -mr-20 w-80 h-80 bg-blue-50 rounded-full blur-3xl opacity-50"></div>
+            
+            <div class="container mx-auto px-4 relative z-10">
+                <div class="max-w-4xl mx-auto text-center mb-16">
+                    <span class="text-secondary font-bold uppercase tracking-wider text-sm mb-2 block">La Realidad en Costa Rica</span>
+                    <h2 class="text-3xl md:text-5xl font-extrabold text-gray-900 mb-6 leading-tight">
+                        ¿Sabías que las Corrientes de Resaca son la causa #1 de accidentes?
+                    </h2>
+                    <p class="text-xl text-gray-600 leading-relaxed">
+                        Miles de bañistas se ponen en riesgo cada año por falta de información. SafeWave CR nace para cambiar esta estadística mediante la tecnología y la educación preventiva.
+                    </p>
+                </div>
+
+                <div class="max-w-4xl mx-auto bg-white rounded-2xl shadow-[0_10px_40px_-10px_rgba(0,0,0,0.1)] border border-gray-100 overflow-hidden">
+                    <div class="bg-gradient-to-r from-primary to-blue-800 p-6 text-white flex items-center justify-between">
+                        <div class="flex items-center gap-3">
+                            <i class="fa-solid fa-circle-info text-2xl text-secondary"></i>
+                            <h3 class="text-xl font-bold">¿Qué es una corriente de resaca?</h3>
+                        </div>
+                    </div>
+                    <div class="p-8 md:p-10">
+                        <div class="relative">
+                            <p id="intro-text" class="text-gray-700 text-lg leading-relaxed overflow-hidden transition-all duration-700 ease-in-out max-h-[6em]">
+                                Las corrientes de resaca son canales potentes y estrechos de agua que fluyen rápidamente desde la orilla hacia el mar. Son responsables de la mayoría de los rescates realizados por salvavidas en playas de todo el mundo. <br><br>
+                                A menudo, los bañistas desprevenidos entran en el agua sin darse cuenta del peligro, ya que estas corrientes pueden parecer zonas de calma entre las olas rompientes. Sin embargo, su fuerza es suficiente para arrastrar incluso a los nadadores más experimentados mar adentro, provocando pánico y agotamiento, lo cual es la verdadera causa de ahogamiento. Identificarlas visualmente por su coloración diferente o la espuma en la superficie es vital para la prevención.
+                            </p>
+                            <div id="text-fade" class="absolute bottom-0 left-0 w-full h-12 bg-gradient-to-t from-white to-transparent pointer-events-none transition-opacity duration-300"></div>
+                        </div>
+                        
+                        <div class="mt-6 text-center">
+                            <button id="btn-leer-mas" onclick="toggleLeerMasPersonalizado()" class="inline-flex items-center gap-2 text-primary font-bold hover:text-accent transition-colors">
+                                <span>Leer más</span>
+                                <i class="fa-solid fa-chevron-down text-sm"></i>
+                            </button>
+                        </div>
+                    </div>
                 </div>
             </div>
         </section>
 
-        <!-- SECCIÓN A: La Realidad -->
-        <section class="py-16 bg-white border-t border-gray-100">
-            <div class="container mx-auto px-4 text-center">
-                <h2 class="text-3xl font-bold text-gray-800 mb-6">¿Sabías que las Corrientes de Resaca son la causa #1
-                    de accidentes?</h2>
-                <p class="text-lg text-gray-700 max-w-3xl mx-auto leading-relaxed">
-                    En Costa Rica, miles de bañistas se ponen en riesgo cada año por falta de información. SafeWave CR
-                    nace para cambiar esta estadística mediante la tecnología y la educación.
-                </p>
-            </div>
-        </section>
-
-        <!-- SECCIÓN B: Nuestros Pilares -->
-        <section class="py-16 bg-blue-50">
+        <section class="py-16 bg-gray-900 text-white relative border-y border-gray-800">
             <div class="container mx-auto px-4">
-                <h2 class="text-3xl font-bold text-center text-primary mb-12">Nuestros Pilares</h2>
-                <div id="pilares-container" class="grid grid-cols-1 md:grid-cols-3 gap-8">
-                    <!-- Cargado dinámicamente -->
+                <div class="flex flex-col md:flex-row justify-between items-end mb-10 gap-4">
+                    <div>
+                        <h2 class="text-2xl font-bold text-white flex items-center gap-3">
+                            <i class="fa-solid fa-chart-pulse text-secondary"></i>
+                            Monitoreo en Tiempo Real
+                        </h2>
+                        <p class="text-gray-400 text-sm mt-1">Resumen actual de condiciones basado en nuestros reportes.</p>
+                    </div>
+                    <div class="text-right">
+                        <span class="inline-block px-3 py-1 bg-green-500/20 text-green-400 text-xs font-bold rounded-full border border-green-500/30 animate-pulse">
+                            ● SISTEMA ACTIVO
+                        </span>
+                    </div>
+                </div>
+                
+                <div id="stats-dashboard" class="grid grid-cols-2 md:grid-cols-4 gap-6 max-w-6xl mx-auto">
+                    <div class="col-span-4 text-center text-gray-500">Cargando estadísticas...</div>
                 </div>
             </div>
         </section>
 
-        <!-- SECCIÓN C: Llamada a la Acción -->
-        <section class="py-20 bg-gradient-to-r from-primary to-secondary text-white text-center">
+        <section class="py-20 bg-blue-50/50">
             <div class="container mx-auto px-4">
-                <h2 class="text-4xl font-bold mb-8">¿Listo para aprender?</h2>
-                <a href="propuesta.html"
-                    class="inline-block bg-accent hover:bg-yellow-500 text-white font-bold py-4 px-10 rounded-full text-xl shadow-lg transform hover:scale-105 transition-all">
+                <div class="text-center mb-16">
+                    <h2 class="text-3xl font-bold text-primary mb-4">Nuestros Pilares</h2>
+                    <div class="w-20 h-1 bg-secondary mx-auto rounded-full"></div>
+                </div>
+                
+                <div id="pilares-container" class="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-6xl mx-auto">
+                    <div class="col-span-3 text-center text-gray-400 py-10">
+                        <i class="fa-solid fa-spinner fa-spin text-3xl mb-3"></i>
+                        <p>Cargando información...</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="py-20 bg-white">
+            <div class="container mx-auto px-4">
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center max-w-6xl mx-auto">
+                    <div class="relative order-2 lg:order-1">
+                        <div class="absolute inset-0 bg-secondary/10 rounded-3xl transform rotate-3"></div>
+                        <div class="relative bg-white border border-gray-100 rounded-3xl p-8 shadow-xl">
+                            <div class="flex items-center gap-4 mb-6">
+                                <div class="w-12 h-12 rounded-full bg-accent/20 flex items-center justify-center text-accent">
+                                    <i class="fa-solid fa-lightbulb text-2xl"></i>
+                                </div>
+                                <h3 class="text-2xl font-bold text-gray-800">Consejo de Seguridad</h3>
+                            </div>
+                            <blockquote class="text-2xl font-medium text-gray-700 leading-snug italic mb-6">
+                                <span id="consejo-texto">Cargando tu consejo del día...</span>
+                            </blockquote>
+                            <div class="flex items-center gap-2 text-sm text-gray-500 font-semibold uppercase tracking-wider">
+                                <span class="w-8 h-[2px] bg-secondary"></span>
+                                SafeWave CR Tips
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="order-1 lg:order-2 text-center lg:text-left">
+                        <h2 class="text-3xl md:text-4xl font-bold text-primary mb-6">La educación es tu mejor salvavidas</h2>
+                        <p class="text-lg text-gray-600 mb-8">
+                            No dejes tu seguridad al azar. Nuestra plataforma te ofrece simulaciones en tiempo real y guías interactivas para que tomes decisiones informadas antes de entrar al agua.
+                        </p>
+                        <ul class="space-y-4 mb-8 text-left inline-block">
+                            <li class="flex items-center gap-3 text-gray-700">
+                                <i class="fa-solid fa-check text-green-500"></i> Aprende el código de banderas
+                            </li>
+                            <li class="flex items-center gap-3 text-gray-700">
+                                <i class="fa-solid fa-check text-green-500"></i> Identifica corrientes peligrosas
+                            </li>
+                            <li class="flex items-center gap-3 text-gray-700">
+                                <i class="fa-solid fa-check text-green-500"></i> Planifica tu visita a la playa
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="py-24 relative overflow-hidden">
+            <div class="absolute inset-0 bg-gradient-to-br from-primary via-blue-800 to-secondary"></div>
+            <div class="absolute inset-0 bg-[url('https://www.transparenttextures.com/patterns/cubes.png')] opacity-10"></div>
+            
+            <div class="container mx-auto px-4 relative z-10 text-center">
+                <h2 class="text-4xl md:text-5xl font-extrabold text-white mb-8 drop-shadow-md">¿Listo para aprender?</h2>
+                <p class="text-xl text-blue-100 mb-10 max-w-2xl mx-auto">
+                    Entra a nuestro simulador interactivo y descubre cómo se comportan las condiciones en tus playas favoritas.
+                </p>
+                <a href="propuesta.html" class="inline-flex items-center gap-3 bg-accent hover:bg-yellow-400 text-white hover:text-blue-900 font-bold py-5 px-10 rounded-full text-xl shadow-lg hover:shadow-2xl transform hover:scale-105 transition-all duration-300">
+                    <i class="fa-solid fa-play"></i>
                     Ir al Simulador de Playas
                 </a>
             </div>
         </section>
 
-        <!-- 3. Tip of the Day Section -->
-        <section class="text-center py-12">
-            <h2 class="text-2xl font-bold text-gray-800 mb-6">Consejo de Seguridad del Día</h2>
-            <div id="consejo-container"
-                class="max-w-2xl mx-auto bg-white border-2 border-secondary rounded-xl p-8 shadow-lg relative">
-                        <!-- Icon -->
-                        <div
-                            class="absolute -top-6 left-1/2 transform -translate-x-1/2 bg-white p-3 rounded-full border-2 border-secondary shadow-sm">
-                            <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 text-secondary" fill="none"
-                                viewBox="0 0 24 24" stroke="currentColor">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                    d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-                            </svg>
-                        </div>
-
-                        <p id="consejo-texto" class="text-xl text-gray-700 italic font-medium mt-4">
-                            Cargando consejo...
-                        </p>
-                </div>
-        </section>
-
     </main>
 
-    <!-- Footer -->
-    <footer class="bg-white shadow-[0_-4px_6px_-1px_rgba(0,0,0,0.1)] text-gray-600 mt-auto border-t border-gray-100">
-        <div class="max-w-7xl mx-auto py-8 px-4 sm:px-6 lg:px-8">
-            <div class="md:flex md:justify-between items-center">
-                <div class="mb-6 md:mb-0">
-                    <div class="flex items-center gap-2">
-                        <img src="fotos/Logo.png" alt="SafeWave CR Logo" class="h-10 w-auto">
-                        <span class="font-bold text-xl text-primary">SafeWave CR</span>
-                        <span class="font-bold text-xl">SafeWave CR</span>
-                    </div>
-                    <p class="mt-2 text-sm text-gray-500 max-w-xs">
-                        Promoviendo la cultura de prevención y seguridad en nuestras playas.
+    <footer class="bg-white border-t border-gray-100 pt-12 pb-8">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8 mb-8">
+                
+                <div class="text-center md:text-left">
+                    <a href="index.html" class="inline-flex items-center gap-2 group mb-4">
+                        <img src="fotos/Logo.png" alt="SafeWave CR Logo" class="h-10 w-auto group-hover:scale-105 transition-transform">
+                        <span class="font-extrabold text-xl text-primary">SafeWave <span class="text-secondary">CR</span></span>
+                    </a>
+                    <p class="text-gray-500 text-sm leading-relaxed max-w-xs mx-auto md:mx-0">
+                        Promoviendo la cultura de prevención y seguridad en nuestras playas costarricenses a través de la tecnología y la educación.
                     </p>
                 </div>
-                <div class="text-center md:text-right">
-                    <p class="text-sm text-gray-500">&copy; 2025 SafeWave CR. Todos los derechos reservados.</p>
-                    <p class="text-sm text-accent font-semibold mt-1">UTN - ISW-512</p>
+
+                <div class="text-center">
+                    <h3 class="font-bold text-gray-800 mb-4 uppercase text-xs tracking-wider">Navegación</h3>
+                    <ul class="space-y-2 text-sm">
+                        <li><a href="index.html" class="text-gray-600 hover:text-primary transition-colors">Inicio</a></li>
+                        <li><a href="acerca.html" class="text-gray-600 hover:text-primary transition-colors">Acerca de Nosotros</a></li>
+                        <li><a href="propuesta.html" class="text-gray-600 hover:text-primary transition-colors">Centro de Seguridad</a></li>
+                        <li><a href="contacto.html" class="text-gray-600 hover:text-primary transition-colors">Contacto</a></li>
+                    </ul>
                 </div>
+
+                <div class="text-center md:text-right">
+                    <p class="text-xs text-gray-400">Proyecto Universitario</p>
+                    <p class="text-xs text-secondary font-bold">UTN - ISW-512</p>
+                </div>
+            </div>
+
+            <div class="border-t border-gray-100 pt-8 text-center">
+                <p class="text-sm text-gray-400">&copy; 2025 SafeWave CR. Todos los derechos reservados.</p>
             </div>
         </div>
     </footer>
 
-</body>
+    <script>
+        function toggleLeerMasPersonalizado() {
+            if (typeof toggleLeerMas === 'function') {
+                toggleLeerMas();
+            }
+            const btn = document.getElementById('btn-leer-mas');
+            const fade = document.getElementById('text-fade');
+            const icon = btn.querySelector('i');
+            const span = btn.querySelector('span');
 
+            setTimeout(() => {
+                if (span.textContent.includes('menos')) {
+                    fade.classList.add('opacity-0'); 
+                    icon.classList.remove('fa-chevron-down');
+                    icon.classList.add('fa-chevron-up');
+                } else {
+                    fade.classList.remove('opacity-0'); 
+                    icon.classList.remove('fa-chevron-up');
+                    icon.classList.add('fa-chevron-down');
+                }
+            }, 50);
+        }
+    </script>
+</body>
 </html>
