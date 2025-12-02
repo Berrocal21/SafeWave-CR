@@ -340,69 +340,106 @@ function initMap() {
         .openPopup();
 }
 
+// ... (resto del código anterior sin cambios) ...
+
 function validarFormulario(e) {
     e.preventDefault();
     let isValid = true;
 
-    // Función auxiliar para mostrar/ocultar errores (Mantenemos tu lógica visual)
     const toggleError = (id, show) => {
-        const el = document.getElementById(id);
-        const err = document.getElementById(`error-${id}`);
-        if(el && err) {
-            // Si hay error: borde rojo y texto visible. Si no: borde gris/azul y texto oculto
-            el.classList.toggle('border-red-500', show);
-            el.classList.toggle('focus:ring-red-200', show); // Agregado feedback de foco
-            err.classList.toggle('hidden', !show);
+        const input = document.getElementById(id);
+        const errorText = document.getElementById(`error-${id}`);
+        if (input && errorText) {
+            input.classList.toggle('border-red-500', show);
+            input.classList.toggle('focus:ring-red-200', show);
+            input.classList.toggle('border-gray-300', !show);
+            errorText.classList.toggle('hidden', !show);
         }
     };
 
-    // 1. Validaciones de Campos de Texto
-    const nombre = document.getElementById('nombre');
-    if(nombre && nombre.value.trim() === '') { toggleError('nombre', true); isValid = false; } else toggleError('nombre', false);
+    // 1. Obtener elementos
+    const nombreEl = document.getElementById('nombre');
+    const correoEl = document.getElementById('correo');
+    const asuntoEl = document.getElementById('asunto');
+    const mensajeEl = document.getElementById('mensaje');
 
-    const correo = document.getElementById('correo');
+    // 2. Validaciones
+    // Nombre
+    if (!nombreEl || nombreEl.value.trim() === '') { toggleError('nombre', true); isValid = false; } 
+    else toggleError('nombre', false);
+
+    // Correo
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    if(correo && !emailRegex.test(correo.value)) { toggleError('correo', true); isValid = false; } else toggleError('correo', false);
+    if (!correoEl || !emailRegex.test(correoEl.value.trim())) { toggleError('correo', true); isValid = false; } 
+    else toggleError('correo', false);
 
-    const asunto = document.getElementById('asunto'); // Asegúrate de tener este input en el HTML o quita esta línea
-    if(asunto && asunto.value.trim() === '') { toggleError('asunto', true); isValid = false; } else toggleError('asunto', false);
+    // Asunto
+    if (!asuntoEl || asuntoEl.value.trim() === '') { toggleError('asunto', true); isValid = false; } 
+    else toggleError('asunto', false);
 
-    const mensaje = document.getElementById('mensaje');
-    if(mensaje && mensaje.value.trim() === '') { toggleError('mensaje', true); isValid = false; } else toggleError('mensaje', false);
+    // Mensaje
+    if (!mensajeEl || mensajeEl.value.trim() === '') { toggleError('mensaje', true); isValid = false; } 
+    else toggleError('mensaje', false);
 
-    // ---------------------------------------------------------
-    // 2. VALIDACIÓN DE RECAPTCHA (INTEGRACIÓN CORRECTA)
-    // ---------------------------------------------------------
+    // Captcha
     const captchaErr = document.getElementById('error-captcha');
-    
-    // Verificamos si la librería de Google se cargó
     if (typeof grecaptcha !== 'undefined') {
-        // grecaptcha.getResponse() devuelve un string largo si está marcado, o vacío "" si no.
-        const response = grecaptcha.getResponse();
-
-        if (response.length === 0) {
-            // No marcado -> Error
-            if(captchaErr) captchaErr.classList.remove('hidden');
+        if (grecaptcha.getResponse().length === 0) {
+            if (captchaErr) captchaErr.classList.remove('hidden');
             isValid = false;
         } else {
-            // Marcado -> Todo bien
-            if(captchaErr) captchaErr.classList.add('hidden');
+            if (captchaErr) captchaErr.classList.add('hidden');
         }
-    } else {
-        // Si no cargó el script (bloqueador de anuncios o error de red)
-        console.warn("Error: Librería reCAPTCHA no cargada.");
     }
 
-    // 3. Resultado Final
+    // 3. Acción Final
     if (isValid) {
-        // Obtener valores para el modal
-        const nombreVal = nombre ? nombre.value : 'Usuario';
-        const asuntoVal = asunto ? asunto.value : 'Consulta General';
+        // RECOLECCIÓN DE TODOS LOS DATOS PARA EL MODAL
+        const datos = {
+            nombre: nombreEl.value,
+            correo: correoEl.value,
+            asunto: asuntoEl.value,
+            mensaje: mensajeEl.value
+        };
         
-        mostrarModalExito(nombreVal, asuntoVal);
+        // Llamada a la función actualizada con los 4 datos
+        mostrarModalExito(datos);
         
-        // Limpiar formulario y reiniciar Captcha
         e.target.reset();
-        if (typeof grecaptcha !== 'undefined') grecaptcha.reset(); 
+        if (typeof grecaptcha !== 'undefined') grecaptcha.reset();
     }
 }
+
+// --- FUNCIÓN ACTUALIZADA: Recibe un objeto con todos los datos ---
+function mostrarModalExito(datos) {
+    const modal = document.getElementById('modal-exito');
+    
+    // Referencias a los campos del modal
+    const elNombre = document.getElementById('modal-nombre');
+    const elCorreo = document.getElementById('modal-correo');
+    const elAsunto = document.getElementById('modal-asunto');
+    const elMensaje = document.getElementById('modal-mensaje');
+
+    // Escudo: Verificar que todo exista antes de intentar escribir
+    if (modal && elNombre && elCorreo && elAsunto && elMensaje) {
+        
+        // Inyectar texto (usamos textContent por seguridad)
+        elNombre.textContent = datos.nombre;
+        elCorreo.textContent = datos.correo;
+        elAsunto.textContent = datos.asunto;
+        elMensaje.textContent = datos.mensaje;
+        
+        // Mostrar Modal
+        modal.classList.remove('hidden');
+    } else {
+        console.error("Error: Elementos del modal no encontrados en el DOM.");
+    }
+}
+
+// Cerrar modal al hacer click en el botón (asegurar que el evento existe)
+document.addEventListener('click', function(e) {
+    if (e.target && e.target.id === 'btn-cerrar-modal') {
+        const modal = document.getElementById('modal-exito');
+        if(modal) modal.classList.add('hidden');
+    }
+});

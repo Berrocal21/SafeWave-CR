@@ -202,20 +202,48 @@
         </div>
     </footer>
 
-    <div id="modal-exito" class="fixed inset-0 bg-black/60 z-[60] hidden flex items-center justify-center p-4 backdrop-blur-sm">
-        <div class="bg-white rounded-2xl shadow-2xl max-w-md w-full p-8 transform transition-all scale-100 text-center">
-            <div class="mx-auto flex items-center justify-center h-16 w-16 rounded-full bg-green-100 mb-6">
+<div id="modal-exito" class="fixed inset-0 bg-black/60 z-[60] hidden flex items-center justify-center p-4 backdrop-blur-sm transition-opacity duration-300">
+    <div class="bg-white rounded-2xl shadow-2xl max-w-lg w-full p-8 transform transition-all scale-100 relative">
+        
+        <div class="text-center mb-6">
+            <div class="mx-auto flex items-center justify-center h-16 w-16 rounded-full bg-green-100 mb-4 animate-bounce">
                 <i class="fa-solid fa-check text-3xl text-green-600"></i>
             </div>
-            <h3 class="text-2xl font-bold text-gray-800 mb-2">¡Mensaje Enviado!</h3>
-            <p class="text-gray-600 mb-8">
-                Gracias, <span id="modal-nombre" class="font-bold text-primary"></span>. Hemos recibido tu consulta sobre "<span id="modal-asunto" class="font-bold"></span>".
-            </p>
-            <button id="btn-cerrar-modal" class="w-full bg-primary hover:bg-blue-900 text-white font-bold py-3 px-6 rounded-xl transition-colors">
-                Cerrar
-            </button>
+            <h3 class="text-2xl font-bold text-primary">¡Mensaje Enviado con Éxito!</h3>
+            <p class="text-gray-500 text-sm mt-1">Hemos recibido tu información correctamente.</p>
         </div>
+
+        <div class="bg-gray-50 rounded-xl p-6 border border-gray-100 mb-8 text-left space-y-3 shadow-inner">
+            <h4 class="text-xs font-bold text-gray-400 uppercase tracking-wider mb-2 border-b border-gray-200 pb-2">Detalles del Envío</h4>
+            
+            <p class="text-sm">
+                <span class="font-bold text-gray-700 block mb-1"><i class="fa-solid fa-user mr-1 text-secondary"></i> Nombre:</span>
+                <span id="modal-nombre" class="text-gray-600 ml-1">--</span>
+            </p>
+            
+            <p class="text-sm">
+                <span class="font-bold text-gray-700 block mb-1"><i class="fa-solid fa-envelope mr-1 text-secondary"></i> Correo:</span>
+                <span id="modal-correo" class="text-gray-600 ml-1">--</span>
+            </p>
+            
+            <p class="text-sm">
+                <span class="font-bold text-gray-700 block mb-1"><i class="fa-solid fa-tag mr-1 text-secondary"></i> Asunto:</span>
+                <span id="modal-asunto" class="text-gray-600 ml-1">--</span>
+            </p>
+            
+            <div class="text-sm">
+                <span class="font-bold text-gray-700 block mb-2"><i class="fa-solid fa-comment mr-1 text-secondary"></i> Mensaje:</span>
+                <div id="modal-mensaje" class="bg-white p-3 rounded-lg border border-gray-200 text-gray-600 italic text-sm h-24 overflow-y-auto">
+                    --
+                </div>
+            </div>
+        </div>
+
+        <button id="btn-cerrar-modal" class="w-full bg-primary hover:bg-blue-900 text-white font-bold py-3 px-6 rounded-xl transition-all shadow-md hover:shadow-lg transform hover:-translate-y-0.5">
+            Entendido, cerrar
+        </button>
     </div>
+</div>
 
 </body>
 </html>
