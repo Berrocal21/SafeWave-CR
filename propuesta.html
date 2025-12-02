@@ -133,6 +133,52 @@
                 </div>
             </div>
 
+            <section id="ficha-tecnica" class="bg-white rounded-3xl shadow-2xl overflow-hidden border border-gray-100 mt-12 transition-all duration-500 opacity-0 translate-y-10">
+            <div class="grid grid-cols-1 lg:grid-cols-2">
+                
+                <div class="relative h-64 lg:h-auto min-h-[400px]">
+                    <img id="ficha-imagen" src="" alt="Playa" class="absolute inset-0 w-full h-full object-cover">
+                    <div class="absolute inset-0 bg-gradient-to-t from-primary/90 via-primary/40 to-transparent flex flex-col justify-end p-8">
+                        <span class="text-accent font-bold uppercase tracking-widest text-sm mb-2">Destino Seleccionado</span>
+                        <h2 id="ficha-titulo" class="text-4xl font-extrabold text-white mb-2">--</h2>
+                        <p id="ficha-provincia" class="text-blue-200 font-medium flex items-center gap-2">
+                            <i class="fa-solid fa-location-dot"></i> <span>--</span>
+                        </p>
+                    </div>
+                </div>
+
+                <div class="p-8 lg:p-12 flex flex-col justify-center bg-white">
+                    
+                    <div class="mb-8">
+                        <h3 class="text-2xl font-bold text-primary mb-4 border-b-2 border-secondary/20 pb-2">Información General</h3>
+                        <p id="ficha-descripcion" class="text-gray-600 leading-relaxed text-lg">
+                            Selecciona una playa arriba para ver su información detallada.
+                        </p>
+                    </div>
+
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        
+                        <div class="bg-blue-50 rounded-xl p-6 border border-blue-100">
+                            <h4 class="font-bold text-primary mb-3 flex items-center gap-2">
+                                <i class="fa-solid fa-thumbs-up text-secondary"></i> Consejos
+                            </h4>
+                            <ul id="lista-tips" class="space-y-3 text-sm text-gray-700">
+                                </ul>
+                        </div>
+
+                        <div class="bg-red-50 rounded-xl p-6 border border-red-100">
+                            <h4 class="font-bold text-red-700 mb-3 flex items-center gap-2">
+                                <i class="fa-solid fa-triangle-exclamation"></i> Precauciones
+                            </h4>
+                            <ul id="lista-precauciones" class="space-y-3 text-sm text-gray-700">
+                                </ul>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </section>
+
             <div class="p-8 md:p-10 bg-gray-50/50">
                 <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
                     
@@ -161,25 +207,6 @@
 
                     <div class="lg:col-span-2 bg-white rounded-2xl border border-gray-100 p-6 shadow-md relative h-96">
                         <canvas id="grafico-accidentes"></canvas>
-                    </div>
-                </div>
-
-                <h3 class="text-xl font-bold text-gray-800 mt-12 mb-6 flex items-center gap-2">
-                    <i class="fa-solid fa-photo-film text-primary"></i> Vista en Vivo y Recursos
-                </h3>
-                
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
-                    <div class="rounded-2xl overflow-hidden shadow-lg h-64 relative group border border-gray-200">
-                        <img id="resultado-imagen" src="" alt="Vista de la playa" class="w-full h-full object-cover transform group-hover:scale-110 transition-transform duration-700">
-                        <div class="absolute inset-0 bg-gradient-to-t from-black/70 via-transparent to-transparent flex items-end p-6">
-                            <p class="text-white font-semibold text-lg flex items-center gap-2">
-                                <i class="fa-solid fa-camera"></i> Vista Actual
-                            </p>
-                        </div>
-                    </div>
-
-                    <div class="rounded-2xl overflow-hidden shadow-lg h-64 bg-black border border-gray-200 relative">
-                        <iframe id="resultado-video" class="w-full h-full" src="" title="Video de la playa" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
                     </div>
                 </div>
             </div>

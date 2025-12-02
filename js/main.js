@@ -276,46 +276,76 @@ function actualizarSimulador(playaId) {
     const playa = appData.playas.find(p => p.id === playaId);
     if (!playa) return;
 
-    // Elementos DOM
-    const elements = {
-        oleaje: document.getElementById('resultado-oleaje'),
-        banderaTxt: document.getElementById('resultado-bandera-texto'),
-        banderaCol: document.getElementById('resultado-bandera-color'),
-        riesgoCard: document.getElementById('card-riesgo'),
-        riesgoTxt: document.getElementById('resultado-riesgo'),
-        img: document.getElementById('resultado-imagen'),
-        video: document.getElementById('resultado-video')
-    };
-
-    if (!elements.oleaje) return;
-
-    // Actualizar Texto
-    elements.oleaje.textContent = playa.oleaje;
-    elements.banderaTxt.textContent = playa.bandera.significado;
-
-    // Actualizar Color Bandera
+    // --- 1. ACTUALIZAR PANELES SUPERIORES (EXISTENTE) ---
+    document.getElementById('resultado-oleaje').textContent = playa.oleaje;
+    document.getElementById('resultado-bandera-texto').textContent = playa.bandera.significado;
+    
+    // Color Bandera
     const colorMap = { 'red': 'bg-red-500', 'yellow': 'bg-yellow-400', 'green': 'bg-green-500' };
-    elements.banderaCol.className = `w-12 h-12 rounded-full border-4 border-white shadow-md ${colorMap[playa.bandera.color] || 'bg-gray-300'}`;
+    const colorClass = colorMap[playa.bandera.color] || 'bg-gray-300';
+    document.getElementById('resultado-bandera-color').className = `w-12 h-12 rounded-full border-4 border-white shadow-md ${colorClass}`;
 
-    // Actualizar Riesgo
-    elements.riesgoCard.className = 'p-6 rounded-2xl shadow-md border-l-8 transition-colors duration-500 bg-gray-100'; 
+    // Tarjeta Riesgo
+    const riskCard = document.getElementById('card-riesgo');
+    const riskText = document.getElementById('resultado-riesgo');
+    riskCard.className = 'p-6 rounded-2xl shadow-md border-l-8 transition-colors duration-500 bg-gray-100'; 
+    
     if (playa.bandera.color === 'red') {
-        elements.riesgoCard.classList.add('bg-red-50', 'border-red-500');
-        elements.riesgoTxt.className = "text-lg font-bold text-red-700 mt-2";
+        riskCard.classList.add('bg-red-50', 'border-red-500');
+        riskText.className = "text-lg font-bold text-red-700 mt-2";
     } else if (playa.bandera.color === 'yellow') {
-        elements.riesgoCard.classList.add('bg-yellow-50', 'border-yellow-500');
-        elements.riesgoTxt.className = "text-lg font-bold text-yellow-700 mt-2";
+        riskCard.classList.add('bg-yellow-50', 'border-yellow-500');
+        riskText.className = "text-lg font-bold text-yellow-700 mt-2";
     } else {
-        elements.riesgoCard.classList.add('bg-green-50', 'border-green-500');
-        elements.riesgoTxt.className = "text-lg font-bold text-green-700 mt-2";
+        riskCard.classList.add('bg-green-50', 'border-green-500');
+        riskText.className = "text-lg font-bold text-green-700 mt-2";
     }
-    elements.riesgoTxt.textContent = playa.descripcion_riesgo;
+    riskText.textContent = playa.descripcion_riesgo;
 
-    // Actualizar Multimedia
-    if(elements.img) { elements.img.src = playa.imagen; elements.img.alt = playa.nombre; }
-    if(elements.video) elements.video.src = `https://www.youtube.com/embed/${playa.video_id}?rel=0`;
+    // Multimedia Pequeña
+    const imgEl = document.getElementById('resultado-imagen');
+    if(imgEl) { imgEl.src = playa.imagen; imgEl.alt = playa.nombre; }
+    
+    const videoEl = document.getElementById('resultado-video');
+    if(videoEl) videoEl.src = `https://www.youtube.com/embed/${playa.video_id}?rel=0`;
 
+    // Gráfico
     actualizarGrafico(playa);
+
+    // --- 2. ACTUALIZAR NUEVA FICHA TÉCNICA (NUEVO) ---
+    const fichaSection = document.getElementById('ficha-tecnica');
+    
+    // Hacemos visible la sección con animación
+    if(fichaSection) {
+        fichaSection.classList.remove('opacity-0', 'translate-y-10');
+        
+        // Imagen y Títulos
+        document.getElementById('ficha-imagen').src = playa.imagen;
+        document.getElementById('ficha-titulo').textContent = playa.nombre;
+        document.getElementById('ficha-provincia').querySelector('span').textContent = playa.provincia;
+        document.getElementById('ficha-descripcion').textContent = playa.descripcion_general;
+
+        // Lista de Tips
+        const tipsContainer = document.getElementById('lista-tips');
+        tipsContainer.innerHTML = playa.tips.map(tip => `
+            <li class="flex items-start gap-2">
+                <i class="fa-solid fa-check text-green-500 mt-1"></i>
+                <span>${tip}</span>
+            </li>
+        `).join('');
+
+        // Lista de Precauciones
+        const precaucionesContainer = document.getElementById('lista-precauciones');
+        // Verificamos si existe el array en el JSON (por si acaso faltara en alguno)
+        const precauciones = playa.precauciones || ["Precaución general al ingresar al mar."];
+        
+        precaucionesContainer.innerHTML = precauciones.map(warn => `
+            <li class="flex items-start gap-2">
+                <i class="fa-solid fa-circle-exclamation text-red-500 mt-1"></i>
+                <span>${warn}</span>
+            </li>
+        `).join('');
+    }
 }
 
 function actualizarGrafico(playa) {

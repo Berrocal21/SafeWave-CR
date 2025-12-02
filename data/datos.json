@@ -63,26 +63,22 @@
             "nombre": "Playa Jacó",
             "provincia": "Puntarenas",
             "imagen": "https://castleofozcostarica.com/wp-content/uploads/2024/10/Where-to-Stay-in-Jaco-Costa-Rica5-1024x576.jpg.webp",
-            "video_id": "https://youtu.be/V4kpp-bLosw",
-            "descripcion_riesgo": "Riesgo Alto: Playa abierta con corrientes de resaca constantes y muy fuertes. Precaución extrema cerca de la desembocadura de los ríos.",
+            "video_id": "u1j-m5WkAdQ",
+            "descripcion_riesgo": "Riesgo Alto: Corrientes de resaca constantes y fuertes.",
+            "descripcion_general": "Jacó es una de las playas más visitadas del Pacífico Central, famosa por su vida nocturna y excelente surf. Es una playa extensa de arena gris volcánica.",
             "tips": [
-                "Nadar EXCLUSIVAMENTE frente a puestos de salvavidas",
-                "El agua no debe pasar de la cintura",
-                "Cuidado con los surfistas"
+                "Nadar SIEMPRE frente a las torres de guardavidas.",
+                "Zona excelente para aprender a surfear, pero peligrosa para bañistas inexpertos.",
+                "No descuidar objetos personales en la arena."
+            ],
+            "precauciones": [
+                "Las corrientes son muy fuertes cerca de la desembocadura de los ríos.",
+                "El oleaje es constante, no le des la espalda al mar.",
+                "Cuidado con las tablas de surf sueltas en la orilla."
             ],
             "oleaje": "Alto",
-            "bandera": {
-                "color": "red",
-                "significado": "Peligro Alto"
-            },
-            "estadisticas": [
-                15,
-                20,
-                12,
-                8,
-                10,
-                18
-            ]
+            "bandera": { "color": "red", "significado": "Peligro Alto" },
+            "estadisticas": [15, 20, 12, 8, 10, 18]
         },
         {
             "id": "manuel-antonio",
@@ -90,25 +86,21 @@
             "provincia": "Puntarenas",
             "imagen": "https://es.visitcostarica.com/sites/default/files/2024-10/Aerial%20Drone%20view%20of%20Manuel%20Antonio%20National%20Park%20in%20Costa%20Rica.%20.jpg",
             "video_id": "M_avgkvznTk",
-            "descripcion_riesgo": "Riesgo Bajo: Bahía protegida con oleaje suave, ideal para familias. Sin embargo, manténgase alerta en Espadilla Norte.",
+            "descripcion_riesgo": "Riesgo Bajo: Bahía protegida, pero requiere vigilancia.",
+            "descripcion_general": "Ubicada dentro del Parque Nacional, es considerada una de las playas más bellas del mundo. Sus aguas son cristalinas y la arena blanca, rodeada de selva tropical.",
             "tips": [
-                "Cuidado con la fauna (mapaches roban comida)",
-                "Hidratación constante",
-                "No alimentar animales"
+                "Llegar temprano, el parque tiene límite de ingreso.",
+                "No alimentar a los monos ni mapaches (es ilegal).",
+                "Llevar hidratación, no se permite plástico de un solo uso."
+            ],
+            "precauciones": [
+                "Aunque es calmo, puede haber corrientes en Espadilla Norte.",
+                "Cuidado con la fauna silvestre, los mapaches abren mochilas.",
+                "Prohibido ingresar alimentos procesados al parque."
             ],
             "oleaje": "Bajo",
-            "bandera": {
-                "color": "green",
-                "significado": "Seguro"
-            },
-            "estadisticas": [
-                2,
-                3,
-                1,
-                5,
-                2,
-                4
-            ]
+            "bandera": { "color": "green", "significado": "Seguro" },
+            "estadisticas": [2, 3, 1, 5, 2, 4]
         },
         {
             "id": "cocles",
@@ -116,25 +108,21 @@
             "provincia": "Limón",
             "imagen": "https://digitaltravelcouple.com/wp-content/uploads/2021/10/playa-cocles-costa-rica-shore.jpg",
             "video_id": "Dm9tdsPlecl",
-            "descripcion_riesgo": "Riesgo Medio/Alto: Famosa por el 'Salsa Brava'. Corrientes fuertes típicas del Caribe y fondo irregular con arrecifes.",
+            "descripcion_riesgo": "Riesgo Medio/Alto: Corrientes típicas del Caribe (Salsa Brava).",
+            "descripcion_general": "Una joya del Caribe Sur cerca de Puerto Viejo. Ambiente relajado, reggae y naturaleza exuberante. Es sede de torneos de surf importantes.",
             "tips": [
-                "Preguntar a locales antes de entrar",
-                "Cuidado con arrecifes y piedras",
-                "Zona popular de surf"
+                "Alquila una bicicleta para llegar, es la mejor forma de moverse.",
+                "Pregunta a los locales sobre el estado del mar antes de entrar.",
+                "Disfruta la gastronomía caribeña (Rice and Beans) en la zona."
+            ],
+            "precauciones": [
+                "Fondo irregular con arrecifes de coral cortantes.",
+                "El mar Caribe cambia rápidamente de calmo a peligroso.",
+                "Cuidado con las corrientes de retorno (rip currents)."
             ],
             "oleaje": "Medio",
-            "bandera": {
-                "color": "yellow",
-                "significado": "Precaución"
-            },
-            "estadisticas": [
-                8,
-                12,
-                6,
-                4,
-                7,
-                9
-            ]
+            "bandera": { "color": "yellow", "significado": "Precaución" },
+            "estadisticas": [8, 12, 6, 4, 7, 9]
         },
         {
             "id": "tamarindo",
@@ -142,51 +130,45 @@
             "provincia": "Guanacaste",
             "imagen": "https://upload.wikimedia.org/wikipedia/commons/c/cc/Costa_Rica_Playa_Tamarindo_and_Rivermouth_2007_Aerial_Photograph_Tamarindowiki_01.JPG",
             "video_id": "SbiR1elCHzs",
-            "descripcion_riesgo": "Riesgo Medio: Playa muy turística pero con zonas de rocas y corrientes en los extremos (Estero).",
+            "descripcion_riesgo": "Riesgo Medio: Zonas rocosas y estero con fauna peligrosa.",
+            "descripcion_general": "El centro turístico de Guanacaste. Atardeceres espectaculares y una playa larga ideal para caminatas y surf de nivel intermedio.",
             "tips": [
-                "Cuidado con las rocas en marea baja",
-                "Respetar zonas de bañistas vs surfistas",
-                "Cuidado con cocodrilos cerca del estero"
+                "Ideal para ver el atardecer desde la playa.",
+                "Hay muchas escuelas de surf para principiantes.",
+                "Visita el Parque Nacional Marino Las Baulas cercano."
+            ],
+            "precauciones": [
+                "PELIGRO: Presencia de cocodrilos en el Estero (desembocadura del río).",
+                "Zonas rocosas expuestas en marea baja (Capitán Suizo).",
+                "Respeta las zonas delimitadas para bañistas vs surfistas."
             ],
             "oleaje": "Medio",
-            "bandera": {
-                "color": "yellow",
-                "significado": "Precaución"
-            },
-            "estadisticas": [
-                10,
-                15,
-                8,
-                12,
-                9,
-                11
-            ]
-        },
-        {
+            "bandera": { "color": "yellow", "significado": "Precaución" },
+            "estadisticas": [10, 15, 8, 12, 9, 11]
+        },{
             "id": "dominical",
             "nombre": "Playa Dominical",
             "provincia": "Puntarenas",
             "imagen": "https://uniquevcr.com/wp-content/uploads/2023/03/dominical-costa-rica.jpeg",
             "video_id": "sT_PmYoyW41",
-            "descripcion_riesgo": "Riesgo Alto: Conocida por olas grandes y potentes. Recomendada principalmente para surfistas expertos, no para nadadores.",
+            "descripcion_riesgo": "Riesgo Alto: Olas potentes y corrientes de retorno muy fuertes.",
+            "descripcion_general": "Ubicada en el Pacífico Sur, es un destino mundialmente famoso para el surf debido a sus olas constantes y poderosas. Ofrece un ambiente bohemio y natural, rodeado de selva y biodiversidad.",
             "tips": [
-                "No recomendada para baño recreativo",
-                "Corrientes de retorno muy fuertes",
-                "Mantenerse en la orilla"
+                "Playa recomendada principalmente para surfistas experimentados.",
+                "Si no eres experto, no ingreses más allá de la cintura.",
+                "Visita el puesto de guardavidas apenas llegues para informarte."
+            ],
+            "precauciones": [
+                "Las corrientes de retorno son permanentes y muy rápidas.",
+                "El impacto de las olas en la orilla puede causar lesiones.",
+                "Mantente alejado de las zonas de surf si solo estás bañándote."
             ],
             "oleaje": "Muy Alto",
             "bandera": {
                 "color": "red",
-                "significado": "Solo Expertos"
+                "significado": "Peligro Alto"
             },
-            "estadisticas": [
-                5,
-                8,
-                4,
-                6,
-                3,
-                7
-            ]
+            "estadisticas": [5, 8, 4, 6, 3, 7]
         }
     ],
     "banderas_guia": [
