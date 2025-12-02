@@ -173,32 +173,32 @@
     ],
     "banderas_guia": [
         {
-            "color": "red",
-            "nombre": "Roja",
-            "significado": "ALTO RIESGO",
-            "descripcion": "Prohibido el ingreso. Corrientes fuertes y oleaje muy peligroso.",
-            "claseColor": "bg-red-600"
+            "color": "green",
+            "nombre": "Verde",
+            "significado": "BAÑO PERMITIDO",
+            "descripcion": "Condiciones del mar seguras para el baño. Disfrute con tranquilidad.",
+            "claseColor": "bg-green-500"
         },
         {
             "color": "yellow",
             "nombre": "Amarilla",
             "significado": "PRECAUCIÓN",
-            "descripcion": "Bañarse con mucho cuidado. Corrientes variables pueden estar presentes.",
-            "claseColor": "bg-yellow-400"
+            "descripcion": "Condiciones cambiantes. Báñese con cuidado y manténgase alerta.",
+            "claseColor": "bg-yellow-400 text-gray-800"
         },
         {
-            "color": "green",
-            "nombre": "Verde",
-            "significado": "SEGURO",
-            "descripcion": "Condiciones buenas para el baño. Disfruta con responsabilidad.",
-            "claseColor": "bg-green-500"
+            "color": "red",
+            "nombre": "Roja",
+            "significado": "PROHIBIDO EL BAÑO",
+            "descripcion": "Alto riesgo. Corrientes fuertes y oleaje peligroso. No ingrese al agua.",
+            "claseColor": "bg-red-600"
         },
         {
-            "color": "blue",
-            "nombre": "Azul",
-            "significado": "SALUD / BIO",
-            "descripcion": "Playa galardonada con Bandera Azul Ecológica. Aguas limpias.",
-            "claseColor": "bg-blue-600"
+            "color": "black",
+            "nombre": "Negra",
+            "significado": "PLAYA CLAUSURADA",
+            "descripcion": "Peligro extremo por condiciones del mar, tormenta eléctrica o contaminación. Prohibido el ingreso total.",
+            "claseColor": "bg-gray-900"
         }
     ]
 }
