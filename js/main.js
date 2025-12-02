@@ -343,16 +343,20 @@ function initMap() {
 function validarFormulario(e) {
     e.preventDefault();
     let isValid = true;
+
+    // Función auxiliar para mostrar/ocultar errores (Mantenemos tu lógica visual)
     const toggleError = (id, show) => {
         const el = document.getElementById(id);
         const err = document.getElementById(`error-${id}`);
         if(el && err) {
+            // Si hay error: borde rojo y texto visible. Si no: borde gris/azul y texto oculto
             el.classList.toggle('border-red-500', show);
+            el.classList.toggle('focus:ring-red-200', show); // Agregado feedback de foco
             err.classList.toggle('hidden', !show);
         }
     };
 
-    // Validaciones básicas
+    // 1. Validaciones de Campos de Texto
     const nombre = document.getElementById('nombre');
     if(nombre && nombre.value.trim() === '') { toggleError('nombre', true); isValid = false; } else toggleError('nombre', false);
 
@@ -360,32 +364,45 @@ function validarFormulario(e) {
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     if(correo && !emailRegex.test(correo.value)) { toggleError('correo', true); isValid = false; } else toggleError('correo', false);
 
+    const asunto = document.getElementById('asunto'); // Asegúrate de tener este input en el HTML o quita esta línea
+    if(asunto && asunto.value.trim() === '') { toggleError('asunto', true); isValid = false; } else toggleError('asunto', false);
+
     const mensaje = document.getElementById('mensaje');
     if(mensaje && mensaje.value.trim() === '') { toggleError('mensaje', true); isValid = false; } else toggleError('mensaje', false);
 
-    // Validación reCAPTCHA
+    // ---------------------------------------------------------
+    // 2. VALIDACIÓN DE RECAPTCHA (INTEGRACIÓN CORRECTA)
+    // ---------------------------------------------------------
     const captchaErr = document.getElementById('error-captcha');
+    
+    // Verificamos si la librería de Google se cargó
     if (typeof grecaptcha !== 'undefined') {
-        if (grecaptcha.getResponse().length === 0) {
+        // grecaptcha.getResponse() devuelve un string largo si está marcado, o vacío "" si no.
+        const response = grecaptcha.getResponse();
+
+        if (response.length === 0) {
+            // No marcado -> Error
             if(captchaErr) captchaErr.classList.remove('hidden');
             isValid = false;
         } else {
+            // Marcado -> Todo bien
             if(captchaErr) captchaErr.classList.add('hidden');
         }
+    } else {
+        // Si no cargó el script (bloqueador de anuncios o error de red)
+        console.warn("Error: Librería reCAPTCHA no cargada.");
     }
 
+    // 3. Resultado Final
     if (isValid) {
-        mostrarModalExito(nombre ? nombre.value : 'Usuario', 'Mensaje Enviado');
+        // Obtener valores para el modal
+        const nombreVal = nombre ? nombre.value : 'Usuario';
+        const asuntoVal = asunto ? asunto.value : 'Consulta General';
+        
+        mostrarModalExito(nombreVal, asuntoVal);
+        
+        // Limpiar formulario y reiniciar Captcha
         e.target.reset();
-        if (typeof grecaptcha !== 'undefined') grecaptcha.reset();
-    }
-}
-
-function mostrarModalExito(nombre, asunto) {
-    const modal = document.getElementById('modal-exito');
-    if (modal) {
-        document.getElementById('modal-nombre').textContent = nombre;
-        document.getElementById('modal-asunto').textContent = asunto;
-        modal.classList.remove('hidden');
+        if (typeof grecaptcha !== 'undefined') grecaptcha.reset(); 
     }
 }
