@@ -1,9 +1,9 @@
-console.log("SafeWave App Iniciada");
+console.log("SafeWave App Iniciada - Versión Final");
 
 // --- Variables Globales ---
 let appData = null;
-let currentChart = null; // Instancia del gráfico para destruir/actualizar
-let autoPlayInterval;    // Para controlar el carrusel
+let currentChart = null; // Instancia del gráfico
+let autoPlayInterval;    // Control del carrusel
 
 // --- Inicialización ---
 document.addEventListener('DOMContentLoaded', async () => {
@@ -15,20 +15,24 @@ document.addEventListener('DOMContentLoaded', async () => {
         const response = await fetch('data/datos.json');
         if (!response.ok) throw new Error('Error al cargar datos.json');
         appData = await response.json();
-        console.log("Datos cargados:", appData);
+        console.log("Datos cargados correctamente");
 
-        // --- LÓGICA DE LA PÁGINA DE INICIO (NUEVO) ---
-        initCarousel();             // Requerimiento: Carrusel funcional
-        cargarCintaAlertas();       // Interacción JS #1: Cinta de noticias (Ticker)
-        cargarMonitorEstadistico(); // Interacción JS #2: Monitor de riesgo
-        cargarPilares();            // Contenido desde JSON
+        // --- PÁGINA DE INICIO ---
+        initCarousel();             // Carrusel con transición suave
+        cargarCintaAlertas();       // Ticker de noticias
+        cargarMonitorEstadistico(); // Dashboard de estadísticas
+        cargarPilares();            // Tarjetas de pilares
         cargarConsejo();            // Consejo del día
 
-        // --- LÓGICA DE OTRAS PÁGINAS (EXISTENTE) ---
-        cargarAutores();            // Página Acerca de
-        iniciarSimulador();         // Página Centro de Seguridad
-        if (typeof cargarGuiaBanderas === 'function') cargarGuiaBanderas(); // Si implementaste la guía
-        iniciarContacto();          // Página Contacto
+        // --- PÁGINA ACERCA DE ---
+        cargarAutores();
+
+        // --- PÁGINA CENTRO DE SEGURIDAD ---
+        cargarGuiaBanderas();       // Guía interactiva
+        iniciarSimulador();         // Simulador de playa
+
+        // --- PÁGINA CONTACTO ---
+        iniciarContacto();          // Mapa y validaciones
 
     } catch (error) {
         console.error("Error inicializando la app:", error);
@@ -42,23 +46,21 @@ function initMobileMenu() {
 
     if (btn && menu) {
         btn.addEventListener('click', () => {
-            const expanded = btn.getAttribute('aria-expanded') === 'true' || false;
-            btn.setAttribute('aria-expanded', !expanded);
             menu.classList.toggle('hidden');
         });
     }
 }
 
+
 // ==========================================
-// SECCIÓN: PÁGINA DE INICIO (REQUERIMIENTOS)
+// SECCIÓN 1: PÁGINA DE INICIO
 // ==========================================
 
-// --- 1. Lógica del Carrusel Mejorado ---
+// --- Carrusel ---
 function initCarousel() {
     const slidesContainer = document.getElementById('carousel-slides');
     const indicatorsContainer = document.getElementById('carousel-indicators');
     
-    // Escudo: Si no existen los elementos en esta página, salir.
     if (!slidesContainer || !indicatorsContainer || !appData?.carrusel) return;
 
     // Renderizar Slides
@@ -77,7 +79,7 @@ function initCarousel() {
         <button class="w-3 h-3 rounded-full transition-all ${i === 0 ? 'bg-secondary w-6' : 'bg-white/50 hover:bg-white'}" data-index="${i}" aria-label="Slide ${i + 1}"></button>
     `).join('');
 
-    // Control del Carrusel
+    // Lógica de Control
     let currentSlide = 0;
     const items = document.querySelectorAll('.slide-item');
     const dots = indicatorsContainer.querySelectorAll('button');
@@ -97,13 +99,10 @@ function initCarousel() {
         currentSlide = index;
     };
 
-    // Listeners
+    // Event Listeners
     document.getElementById('next-slide')?.addEventListener('click', () => { showSlide(currentSlide + 1); resetTimer(); });
     document.getElementById('prev-slide')?.addEventListener('click', () => { showSlide(currentSlide - 1); resetTimer(); });
-    
-    dots.forEach((dot, idx) => {
-        dot.addEventListener('click', () => { showSlide(idx); resetTimer(); });
-    });
+    dots.forEach((dot, idx) => dot.addEventListener('click', () => { showSlide(idx); resetTimer(); }));
 
     // Auto Play
     const startTimer = () => { autoPlayInterval = setInterval(() => showSlide(currentSlide + 1), 5000); };
@@ -111,12 +110,11 @@ function initCarousel() {
     startTimer();
 }
 
-// --- 2. Interacción Novedosa A: Cinta de Alertas (Ticker) ---
+// --- Cinta de Alertas (Ticker) ---
 function cargarCintaAlertas() {
     const container = document.getElementById('cinta-alertas');
     if (!container || !appData?.playas) return;
 
-    // Crear string de alertas basado en banderas
     const alertas = appData.playas.map(playa => {
         let icon = playa.bandera.color === 'red' ? '<i class="fa-solid fa-circle text-red-500"></i>' : 
                   (playa.bandera.color === 'yellow' ? '<i class="fa-solid fa-circle text-yellow-400"></i>' : 
@@ -124,16 +122,14 @@ function cargarCintaAlertas() {
         return `<span class="mx-6 font-medium flex items-center gap-2 inline-flex">${icon} ${playa.nombre}: ${playa.bandera.significado.toUpperCase()}</span>`;
     }).join(' | ');
 
-    // Duplicar contenido para efecto infinito suave
     container.innerHTML = `<div class="inline-block">${alertas} | ${alertas}</div>`;
 }
 
-// --- 3. Interacción Novedosa B: Monitor Estadístico ---
+// --- Monitor Estadístico ---
 function cargarMonitorEstadistico() {
     const container = document.getElementById('stats-dashboard');
     if (!container || !appData?.playas) return;
 
-    // Calcular estadísticas en tiempo real
     const total = appData.playas.length;
     const highRisk = appData.playas.filter(p => p.bandera.color === 'red').length;
     const mediumRisk = appData.playas.filter(p => p.bandera.color === 'yellow').length;
@@ -143,42 +139,51 @@ function cargarMonitorEstadistico() {
         { label: 'Playas Monitoreadas', val: total, icon: 'fa-umbrella-beach', color: 'text-blue-400' },
         { label: 'Alto Riesgo', val: highRisk, icon: 'fa-triangle-exclamation', color: 'text-red-500' },
         { label: 'Precaución', val: mediumRisk, icon: 'fa-flag', color: 'text-yellow-400' },
-        { label: 'Condición Segura', val: safe, icon: 'fa-check-circle', color: 'text-green-500' }
+        { label: 'Seguras', val: safe, icon: 'fa-check-circle', color: 'text-green-500' }
     ];
 
     container.innerHTML = stats.map(stat => `
-        <div class="bg-gray-800 rounded-xl p-4 border border-gray-700 hover:border-gray-500 transition-colors transform hover:-translate-y-1 duration-300">
-            <i class="fa-solid ${stat.icon} ${stat.color} text-3xl mb-2"></i>
-            <div class="text-3xl font-bold text-white">${stat.val}</div>
-            <div class="text-xs text-gray-400 uppercase tracking-widest mt-1">${stat.label}</div>
+        <div class="bg-white/20 backdrop-blur-sm rounded-xl p-4 border border-white/30 hover:bg-white/30 transition-colors">
+            <i class="fa-solid ${stat.icon} ${stat.color} text-3xl mb-2 drop-shadow-sm"></i>
+            <div class="text-3xl font-bold text-white drop-shadow-md">${stat.val}</div>
+            <div class="text-xs text-blue-100 uppercase tracking-widest mt-1 font-semibold">${stat.label}</div>
         </div>
     `).join('');
 }
 
-// --- 4. Cargar Pilares (Contenido JSON) ---
+// --- Pilares ---
 function cargarPilares() {
     const container = document.getElementById('pilares-container');
     if (!container || !appData?.pilares) return;
 
     container.innerHTML = appData.pilares.map(pilar => `
-        <div class="bg-white p-8 rounded-xl shadow-lg border-t-4 border-secondary hover:-translate-y-2 transition-transform duration-300 group">
-            <div class="w-16 h-16 bg-blue-50 rounded-full flex items-center justify-center text-primary text-2xl mb-6 mx-auto group-hover:scale-110 transition-transform">
+        <div class="bg-white/10 backdrop-blur-md p-8 rounded-xl shadow-lg border border-white/20 hover:-translate-y-2 transition-transform duration-300 group">
+            <div class="w-16 h-16 bg-white/20 rounded-full flex items-center justify-center text-white text-2xl mb-6 mx-auto group-hover:scale-110 transition-transform shadow-inner">
                 <i class="${pilar.icono}"></i>
             </div>
-            <h3 class="text-xl font-bold text-center text-gray-800 mb-3">${pilar.titulo}</h3>
-            <p class="text-gray-600 text-center text-sm leading-relaxed">${pilar.descripcion}</p>
+            <h3 class="text-xl font-bold text-center text-white mb-3 drop-shadow-md">${pilar.titulo}</h3>
+            <p class="text-blue-100 text-center text-sm leading-relaxed">${pilar.descripcion}</p>
         </div>
     `).join('');
 }
 
-// --- 5. Funcionalidad "Leer Más" ---
+// --- Consejo del Día ---
+function cargarConsejo() {
+    const container = document.getElementById('consejo-texto');
+    if (!container || !appData?.consejos) return;
+
+    const randomIndex = Math.floor(Math.random() * appData.consejos.length);
+    container.textContent = `"${appData.consejos[randomIndex]}"`;
+}
+
+// --- Botón Leer Más ---
 window.toggleLeerMas = function () {
     const textElement = document.getElementById('intro-text');
     const btnElement = document.getElementById('btn-leer-mas');
     if (!textElement || !btnElement) return;
 
     const isExpanded = textElement.style.maxHeight === 'none';
-    const span = btnElement.querySelector('span') || btnElement; // Soporte para el botón complejo o simple
+    const span = btnElement.querySelector('span') || btnElement;
     
     if (isExpanded) {
         textElement.style.maxHeight = '6em'; 
@@ -189,21 +194,11 @@ window.toggleLeerMas = function () {
     }
 };
 
-// --- 6. Consejo del Día ---
-function cargarConsejo() {
-    const container = document.getElementById('consejo-texto');
-    if (!container || !appData?.consejos) return;
-
-    const randomIndex = Math.floor(Math.random() * appData.consejos.length);
-    container.textContent = `"${appData.consejos[randomIndex]}"`;
-}
-
 
 // ==========================================
-// SECCIÓN: OTRAS PÁGINAS (FUNCIONALIDAD BASE)
+// SECCIÓN 2: ACERCA DE
 // ==========================================
 
-// --- Autores (Acerca de) ---
 function cargarAutores() {
     const container = document.getElementById('autores-container');
     if (!container || !appData?.autores) return;
@@ -229,24 +224,59 @@ function cargarAutores() {
     `).join('');
 }
 
-// --- Simulador (Centro de Seguridad) ---
+
+// ==========================================
+// SECCIÓN 3: CENTRO DE SEGURIDAD (SIMULADOR)
+// ==========================================
+
+// --- Guía de Banderas ---
+function cargarGuiaBanderas() {
+    const container = document.getElementById('banderas-container');
+    const infoBox = document.getElementById('info-bandera');
+    const titleEl = document.getElementById('titulo-bandera');
+    const descEl = document.getElementById('desc-bandera');
+
+    if (!container || !appData?.banderas_guia) return;
+
+    container.innerHTML = appData.banderas_guia.map((bandera, index) => `
+        <button onclick="mostrarInfoBandera(${index})" 
+                class="group flex flex-col items-center gap-3 transition-all duration-300 transform hover:scale-110 focus:outline-none">
+            <div class="w-20 h-14 ${bandera.claseColor} shadow-lg rounded-md relative group-hover:shadow-2xl border-2 border-white/50">
+                <div class="absolute left-0 top-0 bottom-0 w-1.5 bg-black/20"></div>
+            </div>
+            <span class="text-sm font-bold text-gray-500 group-hover:text-primary uppercase tracking-wider">${bandera.nombre}</span>
+        </button>
+    `).join('');
+
+    window.mostrarInfoBandera = function(index) {
+        const bandera = appData.banderas_guia[index];
+        infoBox.classList.remove('hidden');
+        
+        const borderColors = { 'red': 'border-red-600', 'yellow': 'border-yellow-400', 'green': 'border-green-500', 'blue': 'border-blue-600' };
+        const textColors = { 'red': 'text-red-700', 'yellow': 'text-yellow-700', 'green': 'text-green-700', 'blue': 'text-blue-700' };
+        
+        infoBox.className = `bg-white border-l-8 p-8 rounded-r-xl shadow-lg transition-all duration-300 transform translate-y-0 ${borderColors[bandera.color]}`;
+        titleEl.textContent = `Bandera ${bandera.nombre}: ${bandera.significado}`;
+        titleEl.className = `text-2xl font-bold mb-2 ${textColors[bandera.color]}`;
+        descEl.textContent = bandera.descripcion;
+    };
+}
+
+// --- Simulador ---
 function iniciarSimulador() {
     const select = document.getElementById('playa-select');
     if (!select || !appData?.playas) return;
 
-    // Llenar Select
-    select.innerHTML = appData.playas.map(playa => 
-        `<option value="${playa.id}">${playa.nombre}</option>`
-    ).join('');
-
+    select.innerHTML = appData.playas.map(playa => `<option value="${playa.id}">${playa.nombre}</option>`).join('');
     select.addEventListener('change', (e) => actualizarSimulador(e.target.value));
-    actualizarSimulador(appData.playas[0].id); // Cargar primera playa
+    actualizarSimulador(appData.playas[0].id);
 }
 
 function actualizarSimulador(playaId) {
     const playa = appData.playas.find(p => p.id === playaId);
     if (!playa) return;
 
+    // Elementos DOM
     const elements = {
         oleaje: document.getElementById('resultado-oleaje'),
         banderaTxt: document.getElementById('resultado-bandera-texto'),
@@ -257,24 +287,33 @@ function actualizarSimulador(playaId) {
         video: document.getElementById('resultado-video')
     };
 
-    if (!elements.oleaje) return; // Escudo parcial
+    if (!elements.oleaje) return;
 
-    // Actualizar Texto y Multimedia
+    // Actualizar Texto
     elements.oleaje.textContent = playa.oleaje;
     elements.banderaTxt.textContent = playa.bandera.significado;
-    if (elements.img) { elements.img.src = playa.imagen; elements.img.alt = playa.nombre; }
-    if (elements.video) elements.video.src = `https://www.youtube.com/embed/${playa.video_id}?rel=0`;
 
-    // Colores y Estilos
-    const colors = { 'red': 'bg-red-500', 'yellow': 'bg-yellow-400', 'green': 'bg-green-500' };
-    const borderColors = { 'red': 'border-red-500 bg-red-50', 'yellow': 'border-yellow-500 bg-yellow-50', 'green': 'border-green-500 bg-green-50' };
-    
-    elements.banderaCol.className = `w-4 h-4 rounded-full block ${colors[playa.bandera.color] || 'bg-gray-300'}`;
-    elements.riesgoCard.className = `rounded-lg p-6 border-2 shadow-sm transition-colors duration-300 ${borderColors[playa.bandera.color]}`;
-    
-    // Texto de Riesgo
-    elements.riesgoTxt.className = `text-lg font-bold mt-2 ${playa.bandera.color === 'red' ? 'text-red-700' : (playa.bandera.color === 'yellow' ? 'text-yellow-700' : 'text-green-700')}`;
-    elements.riesgoTxt.textContent = playa.descripcion_riesgo || "Información no disponible";
+    // Actualizar Color Bandera
+    const colorMap = { 'red': 'bg-red-500', 'yellow': 'bg-yellow-400', 'green': 'bg-green-500' };
+    elements.banderaCol.className = `w-12 h-12 rounded-full border-4 border-white shadow-md ${colorMap[playa.bandera.color] || 'bg-gray-300'}`;
+
+    // Actualizar Riesgo
+    elements.riesgoCard.className = 'p-6 rounded-2xl shadow-md border-l-8 transition-colors duration-500 bg-gray-100'; 
+    if (playa.bandera.color === 'red') {
+        elements.riesgoCard.classList.add('bg-red-50', 'border-red-500');
+        elements.riesgoTxt.className = "text-lg font-bold text-red-700 mt-2";
+    } else if (playa.bandera.color === 'yellow') {
+        elements.riesgoCard.classList.add('bg-yellow-50', 'border-yellow-500');
+        elements.riesgoTxt.className = "text-lg font-bold text-yellow-700 mt-2";
+    } else {
+        elements.riesgoCard.classList.add('bg-green-50', 'border-green-500');
+        elements.riesgoTxt.className = "text-lg font-bold text-green-700 mt-2";
+    }
+    elements.riesgoTxt.textContent = playa.descripcion_riesgo;
+
+    // Actualizar Multimedia
+    if(elements.img) { elements.img.src = playa.imagen; elements.img.alt = playa.nombre; }
+    if(elements.video) elements.video.src = `https://www.youtube.com/embed/${playa.video_id}?rel=0`;
 
     actualizarGrafico(playa);
 }
@@ -287,49 +326,67 @@ function actualizarGrafico(playa) {
     if (currentChart) currentChart.destroy();
 
     currentChart = new Chart(ctx, {
-        type: 'bar',
+        type: 'line', 
         data: {
             labels: ['Ene', 'Feb', 'Mar', 'Abr', 'May', 'Jun'],
             datasets: [{
-                label: `Incidentes en ${playa.nombre}`,
+                label: `Incidentes - ${playa.nombre}`,
                 data: playa.estadisticas,
-                backgroundColor: '#06b6d4',
-                borderColor: '#1e3a8a',
-                borderWidth: 1
+                backgroundColor: 'rgba(6, 182, 212, 0.2)',
+                borderColor: '#06b6d4',
+                borderWidth: 3,
+                tension: 0.4,
+                fill: true
             }]
         },
         options: {
             responsive: true,
             maintainAspectRatio: false,
-            scales: { y: { beginAtZero: true } }
+            plugins: { legend: { position: 'top' } },
+            scales: {
+                y: { beginAtZero: true, grid: { color: '#f3f4f6' } },
+                x: { grid: { display: false } }
+            }
         }
     });
 }
 
-// --- Contacto (Formulario y Mapa) ---
+
+// ==========================================
+// SECCIÓN 4: CONTACTO (MAPA Y VALIDACIÓN)
+// ==========================================
+
 function iniciarContacto() {
     initMap();
     
     const form = document.getElementById('contacto-form');
     if (form) form.addEventListener('submit', validarFormulario);
 
+    // Cerrar modal
     const btnCerrar = document.getElementById('btn-cerrar-modal');
     if (btnCerrar) {
         btnCerrar.addEventListener('click', () => {
-            document.getElementById('modal-exito').classList.add('hidden');
+            const modal = document.getElementById('modal-exito');
+            if(modal) modal.classList.add('hidden');
+        });
+    }
+    // Cerrar modal al hacer clic fuera (opcional, buena práctica)
+    const modal = document.getElementById('modal-exito');
+    if (modal) {
+        modal.addEventListener('click', (e) => {
+            if (e.target === modal) modal.classList.add('hidden');
         });
     }
 }
 
 function initMap() {
-    if (!document.getElementById('map')) return; // Escudo
+    if (!document.getElementById('map')) return;
 
-    // Coordenadas UTN Sede Central (Villa Bonita, Alajuela)
-    // Latitud: 10.0070, Longitud: -84.2167
+    // Coordenadas UTN Sede Central (Alajuela, Villa Bonita)
     const utnLat = 10.0070;
     const utnLng = -84.2167;
 
-    const map = L.map('map').setView([utnLat, utnLng], 15); // Zoom 15 para ver detalles
+    const map = L.map('map').setView([utnLat, utnLng], 15);
 
     L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
         attribution: '&copy; OpenStreetMap contributors'
@@ -339,8 +396,6 @@ function initMap() {
         .bindPopup('<b>Universidad Técnica Nacional</b><br>Sede Central<br>Alajuela, Costa Rica')
         .openPopup();
 }
-
-// ... (resto del código anterior sin cambios) ...
 
 function validarFormulario(e) {
     e.preventDefault();
@@ -357,89 +412,62 @@ function validarFormulario(e) {
         }
     };
 
-    // 1. Obtener elementos
+    // 1. Obtener Elementos
     const nombreEl = document.getElementById('nombre');
     const correoEl = document.getElementById('correo');
     const asuntoEl = document.getElementById('asunto');
     const mensajeEl = document.getElementById('mensaje');
 
     // 2. Validaciones
-    // Nombre
-    if (!nombreEl || nombreEl.value.trim() === '') { toggleError('nombre', true); isValid = false; } 
-    else toggleError('nombre', false);
-
-    // Correo
+    if (!nombreEl || nombreEl.value.trim() === '') { toggleError('nombre', true); isValid = false; } else toggleError('nombre', false);
+    
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    if (!correoEl || !emailRegex.test(correoEl.value.trim())) { toggleError('correo', true); isValid = false; } 
-    else toggleError('correo', false);
+    if (!correoEl || !emailRegex.test(correoEl.value.trim())) { toggleError('correo', true); isValid = false; } else toggleError('correo', false);
+    
+    if (!asuntoEl || asuntoEl.value.trim() === '') { toggleError('asunto', true); isValid = false; } else toggleError('asunto', false);
+    
+    if (!mensajeEl || mensajeEl.value.trim() === '') { toggleError('mensaje', true); isValid = false; } else toggleError('mensaje', false);
 
-    // Asunto
-    if (!asuntoEl || asuntoEl.value.trim() === '') { toggleError('asunto', true); isValid = false; } 
-    else toggleError('asunto', false);
-
-    // Mensaje
-    if (!mensajeEl || mensajeEl.value.trim() === '') { toggleError('mensaje', true); isValid = false; } 
-    else toggleError('mensaje', false);
-
-    // Captcha
+    // 3. Validación Captcha
     const captchaErr = document.getElementById('error-captcha');
     if (typeof grecaptcha !== 'undefined') {
         if (grecaptcha.getResponse().length === 0) {
-            if (captchaErr) captchaErr.classList.remove('hidden');
+            if(captchaErr) captchaErr.classList.remove('hidden');
             isValid = false;
         } else {
-            if (captchaErr) captchaErr.classList.add('hidden');
+            if(captchaErr) captchaErr.classList.add('hidden');
         }
     }
 
-    // 3. Acción Final
+    // 4. Acción
     if (isValid) {
-        // RECOLECCIÓN DE TODOS LOS DATOS PARA EL MODAL
         const datos = {
             nombre: nombreEl.value,
             correo: correoEl.value,
             asunto: asuntoEl.value,
             mensaje: mensajeEl.value
         };
-        
-        // Llamada a la función actualizada con los 4 datos
         mostrarModalExito(datos);
-        
         e.target.reset();
         if (typeof grecaptcha !== 'undefined') grecaptcha.reset();
     }
 }
 
-// --- FUNCIÓN ACTUALIZADA: Recibe un objeto con todos los datos ---
 function mostrarModalExito(datos) {
     const modal = document.getElementById('modal-exito');
-    
-    // Referencias a los campos del modal
     const elNombre = document.getElementById('modal-nombre');
-    const elCorreo = document.getElementById('modal-correo');
+    const elCorreo = document.getElementById('modal-correo'); // Si decides mostrarlo
     const elAsunto = document.getElementById('modal-asunto');
-    const elMensaje = document.getElementById('modal-mensaje');
+    const elMensaje = document.getElementById('modal-mensaje'); // Si decides mostrarlo
 
-    // Escudo: Verificar que todo exista antes de intentar escribir
-    if (modal && elNombre && elCorreo && elAsunto && elMensaje) {
-        
-        // Inyectar texto (usamos textContent por seguridad)
+    if (modal && elNombre && elAsunto) {
         elNombre.textContent = datos.nombre;
-        elCorreo.textContent = datos.correo;
         elAsunto.textContent = datos.asunto;
-        elMensaje.textContent = datos.mensaje;
         
-        // Mostrar Modal
+        // Si existen los campos extras en el HTML del modal
+        if(elCorreo) elCorreo.textContent = datos.correo;
+        if(elMensaje) elMensaje.textContent = datos.mensaje;
+
         modal.classList.remove('hidden');
-    } else {
-        console.error("Error: Elementos del modal no encontrados en el DOM.");
     }
 }
-
-// Cerrar modal al hacer click en el botón (asegurar que el evento existe)
-document.addEventListener('click', function(e) {
-    if (e.target && e.target.id === 'btn-cerrar-modal') {
-        const modal = document.getElementById('modal-exito');
-        if(modal) modal.classList.add('hidden');
-    }
-});

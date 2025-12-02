@@ -188,5 +188,35 @@
                 7
             ]
         }
+    ],
+    "banderas_guia": [
+        {
+            "color": "red",
+            "nombre": "Roja",
+            "significado": "ALTO RIESGO",
+            "descripcion": "Prohibido el ingreso. Corrientes fuertes y oleaje muy peligroso.",
+            "claseColor": "bg-red-600"
+        },
+        {
+            "color": "yellow",
+            "nombre": "Amarilla",
+            "significado": "PRECAUCIÓN",
+            "descripcion": "Bañarse con mucho cuidado. Corrientes variables pueden estar presentes.",
+            "claseColor": "bg-yellow-400"
+        },
+        {
+            "color": "green",
+            "nombre": "Verde",
+            "significado": "SEGURO",
+            "descripcion": "Condiciones buenas para el baño. Disfruta con responsabilidad.",
+            "claseColor": "bg-green-500"
+        },
+        {
+            "color": "blue",
+            "nombre": "Azul",
+            "significado": "SALUD / BIO",
+            "descripcion": "Playa galardonada con Bandera Azul Ecológica. Aguas limpias.",
+            "claseColor": "bg-blue-600"
+        }
     ]
 }
